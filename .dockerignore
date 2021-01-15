@@ -1,0 +1,20 @@
+# unnecessary LightGBM files
+LightGBM/.appveyor.yml
+LightGBM/build-cran-package.sh
+LightGBM/build_r.R
+LightGBM/.editorconfig
+LightGBM/.github/*
+LightGBM/helpers/*
+LightGBM/.nuget/*
+LightGBM/pmml/*
+LightGBM/R-package/*
+
+# key material
+*.env
+*.pem
+*.pub
+*.rdp
+*_rsa
+
+# exclusions
+!image.env

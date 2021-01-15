@@ -6,6 +6,8 @@ This repository can be used to test and develop changes to LightGBM's Dask integ
 * Jupyter notebooks for testing `lightgbm.dask` against a `LocalCluster` (multi-worker, single-machine) and a `dask_cloudprovider.aws.FargateCluster` (multi-worker, multi-machine)
 * `make` recipes for publishing a custom container image to ECR Public repository, for use with AWS Fargate
 
+<hr>
+
 ## Getting Started
 
 To begin, clone a copy of LightGBM to a folder `LightGBM` at the root of this repo. You can do this however you want, for example:
@@ -15,6 +17,8 @@ git clone --recursive git@github.com:microsoft/LightGBM.git LightGBM
 ```
 
 If you're developing a reproducible example for [an issue](https://github.com/microsoft/LightGBM/issues) or you're testing a potential [pull request](https://github.com/microsoft/LightGBM/pulls), you probably want to clone LightGBM from your fork, instead of the main repo.
+
+<hr>
 
 ## Develop in Jupyter
 
@@ -79,9 +83,13 @@ When you're done with the notebook, stop the container by running the following 
 make stop-notebook
 ```
 
+<hr>
+
 ## Test with a `LocalCluster`
 
 To test `lightgbm.dask` on a `LocalCluster`, run the steps in ["Develop in Jupyter"](#develop-in-jupyter), then try out [`local.ipynb`](./notebooks/local-cluster.ipynb) or your own notebooks.
+
+<hr>
 
 ## Test with a `FargateCluster`
 
@@ -156,16 +164,9 @@ make delete-repo
 
 Then, repeat the steps above to rebuild your images and test again.
 
+<hr>
 
-### Build an image
-
-Build a docker image to run stuff in.
-
-```shell
-make docker-image
-```
-
-### Useful Links
+## Useful Links
 
 * https://github.com/microsoft/LightGBM/pull/3515
 * https://docs.aws.amazon.com/cli/latest/reference/ecr-public/

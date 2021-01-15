@@ -36,8 +36,8 @@ push-image: create-repo
 start-notebook:
 	docker run \
 		-v $$(pwd):/home/jovyan/testing \
-		-e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-notset} \
-		-e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-notset} \
+		--env AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY:-notset} \
+		--env AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID:-notset} \
 		-p 8888:8888 \
 		-p 8787:8787 \
 		--name ${CONTAINER_NAME} \

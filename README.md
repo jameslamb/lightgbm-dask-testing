@@ -81,7 +81,7 @@ make stop-notebook
 
 ## Test with a `LocalCluster`
 
-To test `lightgbm.dask` on a `LocalCluster`, run the steps in ["Develop in Jupyter"](#develop-in-jupyter), then try out [`local.ipynb`](./notebooks/local.ipynb) or your own notebooks.
+To test `lightgbm.dask` on a `LocalCluster`, run the steps in ["Develop in Jupyter"](#develop-in-jupyter), then try out [`local.ipynb`](./notebooks/local-cluster.ipynb) or your own notebooks.
 
 ## Test with a `FargateCluster`
 
@@ -140,7 +140,7 @@ This may take a few minutes to complete.
 
 #### 4. Run the AWS notebook
 
-Follow the steps in ["Develop in Jupyter"](#develop-in-jupyter) to get a local Jupyter Lab running. Open [`aws.ipynb`](./notebooks/aws.ipynb). That notebook contains sample code that uses `dask-cloudprovider` to provision a Dask cluster on AWS Fargate.
+Follow the steps in ["Develop in Jupyter"](#develop-in-jupyter) to get a local Jupyter Lab running. Open [`aws.ipynb`](./notebooks/fargate-cluster.ipynb). That notebook contains sample code that uses `dask-cloudprovider` to provision a Dask cluster on AWS Fargate.
 
 You can view the cluster's current state and its logs by navigating to the Elastic Container Service (ECS) section of the AWS console.
 

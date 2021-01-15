@@ -3,6 +3,7 @@
 
 # Local LightGBM
 LightGBM/*
+ecr-details.json
 
 # User-specific files
 *.suo

@@ -54,10 +54,14 @@ stop-notebook:
 .PHONY: format
 format:
 	black .
+	isort .
+	nbqa isort . --nbqa-mutate
 	nbqa black . --nbqa-mutate
+
 
 .PHONY: lint
 lint:
+	isort --check .
 	black --check --diff .
 	diff_lines=$$(nbqa black --nbqa-diff . | wc -l); \
 	if [ $${diff_lines} -gt 0 ]; then \
@@ -66,3 +70,4 @@ lint:
 	fi
 	flake8 --count .
 	nbqa flake8 .
+	nbqa isort --check .

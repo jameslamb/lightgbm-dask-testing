@@ -1,12 +1,9 @@
-FROM nonsense/dask-lgb-test-base:123
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 
 COPY . /home/jovyan/testing
 
 RUN cd /home/jovyan/testing/LightGBM/python-package && \
-    python setup.py sdist && \
-    # pip install dist/lightgbm*.tar.gz --install-option=--mpi && \
-    pip install dist/lightgbm*.tar.gz && \
-    conda clean -y --all
+    python setup.py install
 
 WORKDIR /home/jovyan/testing
-

@@ -1,17 +1,27 @@
 include image.env
 
-clone:
-	git clone --recursive git@github.com:microsoft/LightGBM.git LightGBM
-
+.PHONY: base-image
 base-image:
-	docker build --no-cache -t nonsense/dask-lgb-test-base:123 - < Dockerfile-base
+	docker build --no-cache -t ${BASE_IMAGE} - < Dockerfile-base
 
-notebook-image:
-	docker build --no-cache -t ${IMAGE_NAME}:${IMAGE_TAG} -f Dockerfile-notebook .
+clean:
+	git clean -d -f -X
 
-cluster-image:
+LightGBM/README.md:
+	git clone --recursive https://github.com/microsoft/LightGBM.git
+
+notebook-image: LightGBM/README.md
+	docker build \
+		--no-cache \
+		-t ${IMAGE_NAME}:${IMAGE_TAG} \
+		-f Dockerfile-notebook \
+		--build-arg BASE_IMAGE=${BASE_IMAGE} \
+		.
+
+cluster-image: LightGBM/README.md
 	docker build --no-cache -t ${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} -f Dockerfile-cluster .
 
+.PHONY: delete-repo
 delete-repo:
 	aws --region us-east-1 \
 		ecr-public batch-delete-image \
@@ -36,6 +46,7 @@ push-image: create-repo
 	docker tag ${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} $$(cat ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):1
 	docker push $$(cat ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):1
 
+.PHONY: start-notebook
 start-notebook:
 	docker run \
 		-v $$(pwd):/home/jovyan/testing \
@@ -46,10 +57,10 @@ start-notebook:
 		--name ${CONTAINER_NAME} \
 		${IMAGE_NAME}:${IMAGE_TAG}
 
+.PHONY: stop-notebook
 stop-notebook:
 	@docker kill ${CONTAINER_NAME}
 	@docker rm ${CONTAINER_NAME}
-
 
 .PHONY: format
 format:
@@ -57,7 +68,6 @@ format:
 	isort .
 	nbqa isort . --nbqa-mutate
 	nbqa black . --nbqa-mutate
-
 
 .PHONY: lint
 lint:

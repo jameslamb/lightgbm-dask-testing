@@ -9,6 +9,7 @@ COPY ./LightGBM /opt/LightGBM
 
 RUN conda install -y -c conda-forge \
     dask-cloudprovider \
+    dask-ml \
     scikit-learn \
     numpy \
     pandas && \

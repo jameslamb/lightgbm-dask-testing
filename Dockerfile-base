@@ -10,6 +10,7 @@ RUN apt update && \
 RUN conda install -y -c conda-forge \
     dask-cloudprovider \
     scikit-learn \
+    dask-ml \
     numpy \
     pandas && \
     pip install \

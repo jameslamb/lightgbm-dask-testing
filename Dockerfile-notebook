@@ -6,4 +6,4 @@ COPY . /home/jovyan/testing
 RUN cd /home/jovyan/testing/LightGBM/python-package && \
     python setup.py install
 
-WORKDIR /home/jovyan/testing
+WORKDIR /home/jovyan/testing/notebooks

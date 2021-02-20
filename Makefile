@@ -1,5 +1,8 @@
 include image.env
 
+clone:
+	git clone --recursive git@github.com:microsoft/LightGBM.git LightGBM
+
 base-image:
 	docker build --no-cache -t nonsense/dask-lgb-test-base:123 - < Dockerfile-base
 

@@ -16,8 +16,7 @@ RUN conda install -y -c conda-forge \
         awscli && \
     # install LightGBM
     cd /opt/LightGBM/python-package && \
-    python setup.py sdist && \
-    pip install dist/lightgbm*.tar.gz && \
+    python setup.py install && \
     cd /opt && \
     rm -rf /opt/LightGBM && \
     conda clean --all

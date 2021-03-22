@@ -1,5 +1,7 @@
 # Testing `lightgbm.dask`
 
+[![GitHub Actions status](https://github.com/jameslamb/lightgbm-dask-testing/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/jameslamb/lightgbm-dask-testing/actions)
+
 This repository can be used to test and develop changes to LightGBM's Dask integration. It contains the following useful features:
 
 * `make` recipes for building a local development image with `lightgbm` installed from a local copy, and Jupyter Lab running for interactive development

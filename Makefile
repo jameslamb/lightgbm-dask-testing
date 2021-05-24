@@ -70,7 +70,7 @@ format:
 	nbqa black . --nbqa-mutate
 
 .PHONY: lint
-lint:
+lint: lint-dockerfiles
 	isort --check .
 	black --check --diff .
 	diff_lines=$$(nbqa black --nbqa-diff . | wc -l); \
@@ -81,3 +81,15 @@ lint:
 	flake8 --count .
 	nbqa flake8 .
 	nbqa isort --check .
+
+.PHONY: lint-dockerfiles
+lint-dockerfiles:
+	for dockerfile in $$(ls | grep -E '^Dockerfile'); do \
+		echo "linting $${dockerfile}" && \
+		docker run \
+			--rm \
+			-v $$(pwd)/.hadolint.yaml:/.config/hadolint.yaml \
+			-i \
+			hadolint/hadolint \
+		< $${dockerfile} || exit 1; \
+	done

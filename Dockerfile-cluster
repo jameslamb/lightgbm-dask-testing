@@ -1,23 +1,22 @@
 FROM daskdev/dask:latest
 
-RUN apt update && \
-    apt-get install -y \
-        build-essential \
-        cmake
-
 COPY ./LightGBM /opt/LightGBM
 
-RUN conda install -y -c conda-forge \
-    dask-cloudprovider \
-    dask-ml \
-    scikit-learn \
-    numpy \
-    pandas && \
-    pip install \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake && \
+    rm -rf /var/lib/apt/lists/ && \
+    conda install -y -c conda-forge \
+        dask-cloudprovider \
+        dask-ml \
+        scikit-learn \
+        numpy \
+        pandas && \
+    pip install --no-cache-dir \
         awscli && \
     # install LightGBM
     cd /opt/LightGBM/python-package && \
     python setup.py install && \
-    cd /opt && \
     rm -rf /opt/LightGBM && \
     conda clean --all

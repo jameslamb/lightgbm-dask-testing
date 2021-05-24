@@ -14,5 +14,5 @@ RUN apt-get update && \
         dask-ml \
         numpy \
         pandas && \
-        pip install --no-cache-dir \
-            awscli
+    pip install --no-cache-dir \
+        awscli

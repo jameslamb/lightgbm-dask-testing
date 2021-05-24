@@ -5,3 +5,8 @@ exclude = '''
   | LightGBM
 )/
 '''
+
+[tool.nbqa.exclude]
+black = "LightGBM/"
+flake8 = "LightGBM/"
+isort = "LightGBM/"

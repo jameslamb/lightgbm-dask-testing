@@ -460,3 +460,5 @@ dask-worker-space/
 
 # exclusions
 !image.env
+
+Untitled*.ipynb

@@ -49,6 +49,7 @@ push-image: create-repo
 .PHONY: start-notebook
 start-notebook:
 	docker run \
+		--rm \
 		-v $$(pwd):/home/jovyan/testing \
 		--env AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY:-notset} \
 		--env AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID:-notset} \

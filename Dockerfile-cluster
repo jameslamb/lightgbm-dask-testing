@@ -8,15 +8,14 @@ RUN apt-get update && \
         cmake && \
     rm -rf /var/lib/apt/lists/ && \
     conda install -y -c conda-forge \
+        boto3 \
         dask-cloudprovider \
         dask-ml \
         scikit-learn \
         numpy \
-        pandas && \
-    pip install --no-cache-dir \
-        awscli && \
+        pandas
     # install LightGBM
-    cd /opt/LightGBM/python-package && \
+RUN cd /opt/LightGBM/python-package && \
     python setup.py install && \
     rm -rf /opt/LightGBM && \
     conda clean --all

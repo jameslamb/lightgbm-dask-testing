@@ -1,0 +1,12 @@
+Changes to `Dockerfile-base`
+
+* moved contents of https://github.com/dask/dask-docker/blob/main/notebook/Dockerfile into this project directly
+* ignored contents of https://github.com/dask/dask-docker/tree/main/notebook/examples
+* removed `kubectl`
+* 
+
+updates:
+
+1. 2 GB
+2. 2 GB (344bc90)
+3.

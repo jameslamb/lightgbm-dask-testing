@@ -5,8 +5,13 @@ Changes to `Dockerfile-base`
 * removed `kubectl`
 * 
 
-updates:
+base image size:
 
 1. 2 GB
 2. 2 GB (344bc90)
-3. 1.71GB ()
+3. 1.71GB
+4. 1.70GB
+
+notebook image size:
+
+cluster image size:

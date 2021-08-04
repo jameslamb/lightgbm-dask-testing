@@ -13,9 +13,9 @@ RUN apt-get update && \
         dask-ml \
         scikit-learn \
         numpy \
-        pandas
-    # install LightGBM
-RUN cd /opt/LightGBM/python-package && \
+        pandas && \
+    cd /opt/LightGBM/python-package && \
     python setup.py install && \
+    cd /root && \
     rm -rf /opt/LightGBM && \
-    conda clean --all
+    conda clean --yes --all

@@ -23,7 +23,6 @@ RUN conda install --yes -c conda-forge \
         dask \
         dask-cloudprovider \
         dask-ml \
-        dask-labextension>=5 \
         distributed \
         ipywidgets \
         lz4 \
@@ -34,7 +33,7 @@ RUN conda install --yes -c conda-forge \
         python-graphviz \
         scikit-learn && \
     pip install --no-cache-dir \
-        awscli && \
+        boto3 && \
     conda clean --all && \
     jupyter lab clean && \
     jlpm cache clean && \

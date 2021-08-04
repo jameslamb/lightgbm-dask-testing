@@ -1,13 +1,24 @@
 # unnecessary LightGBM files
 LightGBM/.appveyor.yml
+LightGBM/.ci/*
 LightGBM/build-cran-package.sh
 LightGBM/build_r.R
+LightGBM/docker/*
+LightGBM/docs/*
 LightGBM/.editorconfig
+LightGBM/examples/*
+LightGBM/.git/*
 LightGBM/.github/*
 LightGBM/helpers/*
 LightGBM/.nuget/*
 LightGBM/pmml/*
+LightGBM/python-package/build/*
+LightGBM/python-package/build_cpp/*
+LightGBM/python-package/compile/*
+LightGBM/python-package/dist/*
+LightGBM/python-package/lightgbm.egg-info/
 LightGBM/R-package/*
+LightGBM/tests/*
 
 # key material
 *.env

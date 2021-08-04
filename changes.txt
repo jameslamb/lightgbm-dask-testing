@@ -11,7 +11,40 @@ base image size:
 2. 2 GB (344bc90)
 3. 1.71GB
 4. 1.70GB
+5. 1.59GB ()
 
 notebook image size:
 
 cluster image size:
+
+```
+docker history \
+    dask-lgb-test-4468592b-5204-4e3b-ad80-7c5ae698472a-cluster:1
+
+docker run \
+    --entrypoint /bin/bash \
+    -it dask-lgb-test-4468592b-5204-4e3b-ad80-7c5ae698472a-cluster:1
+```
+
+Beginning levels
+
+```text
+IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+b36f0ad7dc4a   24 hours ago    RUN /bin/sh -c apt-get update &&     apt-get…   574MB     buildkit.dockerfile.v0
+<missing>      24 hours ago    COPY ./LightGBM /opt/LightGBM # buildkit        305MB     buildkit.dockerfile.v0
+<missing>      3 days ago      /bin/sh -c #(nop)  ENTRYPOINT ["tini" "-g" "…   0B
+<missing>      3 days ago      /bin/sh -c mkdir /opt/app                       0B
+<missing>      3 days ago      /bin/sh -c #(nop) COPY file:a6367ff71aac2462…   832B
+<missing>      3 days ago      /bin/sh -c conda install --yes     -c conda-…   258MB
+<missing>      16 months ago   /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
+<missing>      16 months ago   /bin/sh -c wget --quiet https://repo.anacond…   149MB
+<missing>      16 months ago   /bin/sh -c apt-get update --fix-missing &&  …   210MB
+<missing>      16 months ago   /bin/sh -c #(nop)  ENV PATH=/opt/conda/bin:/…   0B
+<missing>      16 months ago   /bin/sh -c #(nop)  ENV LANG=C.UTF-8 LC_ALL=C…   0B
+<missing>      17 months ago   /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>      17 months ago   /bin/sh -c #(nop) ADD file:e5a364615e0f69616…   69.2MB
+```
+
+1. 1.57GB
+2. 1.43GB
+3. 1.36GB (use .dockerignore to limiit which pieces of LightGBM/ repo are copied in)

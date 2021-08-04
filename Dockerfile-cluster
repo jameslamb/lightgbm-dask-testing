@@ -16,6 +16,30 @@ RUN apt-get update && \
         pandas && \
     cd /opt/LightGBM/python-package && \
     python setup.py install && \
+    # clean up
     cd /root && \
+    apt-get remove -y --purge \
+        build-essential \
+        cmake \
+        cmake-data \
+        git \
+        git-man \
+        liblsan0 \
+        libtsan0 \
+        libubsan1 \
+        mercurial \
+        mercurial-common \
+        python2 \
+        subversion && \
     rm -rf /opt/LightGBM && \
-    conda clean --yes --all
+    conda clean --yes --all && \
+    rm -rf /usr/lib/gcc && \
+    rm -rf /opt/conda/lib/libLLVM*.so && \
+    rm -rf /opt/conda/lib/python3.8/site-packages/pandas/tests && \
+    rm -rf /opt/conda/lib/python3.8/site-packages/numba/tests && \
+    rm -rf /opt/conda/lib/libasan* && \
+    rm -rf /opt/conda/lib/libgfortran* && \
+    rm -rf /opt/conda/lib/liblsan* && \
+    rm -rf /opt/conda/lib/libtsan* && \
+    rm -rf /opt/conda/lib/libubsan* && \
+    rm -rf /opt/conda/pkgs/libllvm10/*

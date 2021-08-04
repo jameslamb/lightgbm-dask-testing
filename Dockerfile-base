@@ -39,14 +39,23 @@ RUN conda install --yes -c conda-forge \
     jlpm cache clean && \
     npm cache clean --force && \
     find /opt/conda/ -type f,l -name '*.a' -delete && \
+    find /opt/conda/ -type f,l -name '*.o' -delete && \
     find /opt/conda/ -type f,l -name '*.pyc' -delete && \
     find /opt/conda/ -type f,l -name '*.js.map' -delete && \
     find /opt/conda/lib/python*/site-packages/bokeh/server/static -type f,l -name '*.js' -not -name '*.min.js' -delete && \
-    rm -rf /opt/conda/pkgs
+    rm -rf /opt/conda/pkgs && \
+    rm -rf /opt/conda/lib/libLLVM-*.so && \
+    rm -rf /opt/conda/bin/pandoc && \
+    rm -rf /opt/conda/lib/python3.8/site-packages/pandas/tests
 
 USER root
 
-RUN echo 'exec start.sh jupyter lab ${JUPYTERLAB_ARGS}' > /usr/bin/prepare.sh && \
+RUN rm -rf /usr/lib/gcc && \
+    apt-get remove -y --purge \
+            build-essential \
+            cmake \
+            git && \
+    echo 'exec start.sh jupyter lab ${JUPYTERLAB_ARGS}' > /usr/bin/prepare.sh && \
     chmod +x /usr/bin/prepare.sh
 
 ENTRYPOINT ["tini", "--", "/usr/bin/prepare.sh"]

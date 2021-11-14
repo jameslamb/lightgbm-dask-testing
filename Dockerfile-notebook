@@ -6,6 +6,8 @@ FROM ${BASE_IMAGE}
 COPY . /home/jovyan/testing
 
 RUN cd /home/jovyan/testing/LightGBM/python-package && \
-    python setup.py install
+    python setup.py install && \
+    cd /home/jovyan && \
+    rm -rf /home/jovyan/testing/LightGBM
 
 WORKDIR /home/jovyan/testing/notebooks

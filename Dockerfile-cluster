@@ -22,4 +22,4 @@ RUN apt-get update && \
     python setup.py install && \
     cd /opt && \
     rm -rf /opt/LightGBM && \
-    conda clean --all
+    conda clean --yes --all

@@ -23,4 +23,7 @@ RUN apt-get update && \
     python setup.py install && \
     cd /opt && \
     rm -rf /opt/LightGBM && \
-    conda clean --yes --all
+    conda clean --yes --all && \
+    apt-get remove -y --purge \
+        build-essential \
+        cmake

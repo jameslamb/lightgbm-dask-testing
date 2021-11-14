@@ -1,4 +1,7 @@
-FROM daskdev/dask-notebook:latest
+FROM daskdev/dask-notebook:2021.9.1
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install -y \

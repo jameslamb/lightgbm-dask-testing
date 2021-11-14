@@ -7,15 +7,15 @@ RUN apt-get update && \
     apt-get install -y \
         --no-install-recommends \
         build-essential \
-        cmake \
-        lsof \
-        net-tools && \
+        cmake && \
     rm -rf /var/lib/apt/lists/* && \
-    conda install -y -c conda-forge \
-        dask-cloudprovider \
-        scikit-learn \
-        dask-ml \
-        numpy \
-        pandas && \
-    pip install --no-cache-dir \
-        awscli
+    conda install -y \
+        -c conda-forge \
+        --override-channels \
+            boto3 \
+            dask-cloudprovider \
+            scikit-learn \
+            dask-ml \
+            numpy \
+            pandas && \
+    conda clean --yes --all

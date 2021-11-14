@@ -4,12 +4,14 @@ include image.env
 base-image:
 	docker build --no-cache -t ${BASE_IMAGE} - < Dockerfile-base
 
+.PHONY: clean
 clean:
 	git clean -d -f -X
 
 LightGBM/README.md:
 	git clone --recursive https://github.com/microsoft/LightGBM.git
 
+.PHONY: notebook-image
 notebook-image: LightGBM/README.md
 	docker build \
 		--no-cache \
@@ -18,6 +20,7 @@ notebook-image: LightGBM/README.md
 		--build-arg BASE_IMAGE=${BASE_IMAGE} \
 		.
 
+.PHONY: cluster-image
 cluster-image: LightGBM/README.md
 	docker build --no-cache -t ${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} -f Dockerfile-cluster .
 
@@ -38,9 +41,11 @@ ecr-details.json:
 			--repository-name ${CLUSTER_IMAGE_NAME} \
 	> ecr-details.json
 
+.PHONY: create-repo
 create-repo: ecr-details.json
 
 # https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html
+.PHONY: push-image
 push-image: create-repo
 	aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 	docker tag ${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} $$(cat ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):1

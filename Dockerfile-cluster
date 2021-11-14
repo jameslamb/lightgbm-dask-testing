@@ -1,6 +1,8 @@
-FROM daskdev/dask:latest
+FROM daskdev/dask:2021.9.1
 
 COPY ./LightGBM /opt/LightGBM
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -18,5 +20,6 @@ RUN apt-get update && \
     # install LightGBM
     cd /opt/LightGBM/python-package && \
     python setup.py install && \
+    cd /opt && \
     rm -rf /opt/LightGBM && \
     conda clean --all

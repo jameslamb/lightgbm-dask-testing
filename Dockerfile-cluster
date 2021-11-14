@@ -9,14 +9,15 @@ RUN apt-get update && \
         build-essential \
         cmake && \
     rm -rf /var/lib/apt/lists/ && \
-    conda install -y -c conda-forge \
-        dask-cloudprovider \
-        dask-ml \
-        scikit-learn \
-        numpy \
-        pandas && \
-    pip install --no-cache-dir \
-        awscli && \
+    conda install -y \
+        -c conda-forge \
+        --override-channels \
+            boto3 \
+            dask-cloudprovider \
+            dask-ml \
+            numpy \
+            pandas \
+            scikit-learn && \
     # install LightGBM
     cd /opt/LightGBM/python-package && \
     python setup.py install && \

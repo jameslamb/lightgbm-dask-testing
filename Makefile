@@ -7,6 +7,7 @@ base-image:
 .PHONY: clean
 clean:
 	git clean -d -f -X
+	rm -rf ./LightGBM/
 
 LightGBM/README.md:
 	git clone --recursive https://github.com/microsoft/LightGBM.git

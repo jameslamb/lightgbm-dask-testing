@@ -1,29 +1,34 @@
-FROM daskdev/dask:2021.9.1
+FROM python:3.9-slim
 
 COPY ./LightGBM /opt/LightGBM
+ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-ARG DEBIAN_FRONTEND=noninteractive
+
+ARG DASK_VERSION=2021.9.1
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
-        cmake && \
-    rm -rf /var/lib/apt/lists/ && \
-    conda install -y \
-        -c conda-forge \
-        --override-channels \
-            boto3 \
-            dask-cloudprovider \
-            dask-ml \
-            numpy \
-            pandas \
-            scikit-learn && \
+        cmake \
+        libomp-dev && \
+    pip install --no-cache-dir \
+        blosc \
+        bokeh \
+        boto3 \
+        dask==${DASK_VERSION} \
+        dask-cloudprovider \
+        dask-ml \
+        distributed==${DASK_VERSION} \
+        lz4 \
+        numpy==1.21.1 \
+        pandas==1.3.0 \
+        scikit-learn && \
     # install LightGBM
     cd /opt/LightGBM/python-package && \
     python setup.py install && \
     cd /opt && \
     rm -rf /opt/LightGBM && \
-    conda clean --yes --all && \
     apt-get remove -y --purge \
-        build-essential \
-        cmake
+        cmake \
+        build-essential && \
+    rm -rf /var/lib/apt/lists/*

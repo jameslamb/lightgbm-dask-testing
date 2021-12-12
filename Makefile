@@ -9,21 +9,12 @@ clean:
 	git clean -d -f -X
 	rm -rf ./LightGBM/
 
-LightGBM/README.md:
-	git clone --recursive https://github.com/microsoft/LightGBM.git
-
-.PHONY: notebook-image
-notebook-image: LightGBM/README.md
-	docker build \
-		--no-cache \
-		-t ${IMAGE_NAME}:${IMAGE_TAG} \
-		-f Dockerfile-notebook \
-		--build-arg BASE_IMAGE=${BASE_IMAGE} \
-		.
-
 .PHONY: cluster-image
 cluster-image: LightGBM/README.md
 	docker build --no-cache -t ${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} -f Dockerfile-cluster .
+
+.PHONY: create-repo
+create-repo: ecr-details.json
 
 .PHONY: delete-repo
 delete-repo:
@@ -42,39 +33,15 @@ ecr-details.json:
 			--repository-name ${CLUSTER_IMAGE_NAME} \
 	> ecr-details.json
 
-.PHONY: create-repo
-create-repo: ecr-details.json
-
-# https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html
-.PHONY: push-image
-push-image: create-repo
-	aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-	docker tag ${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} $$(cat ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):1
-	docker push $$(cat ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):1
-
-.PHONY: start-notebook
-start-notebook:
-	docker run \
-		--rm \
-		-v $$(pwd):/home/jovyan/testing \
-		--env AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY:-notset} \
-		--env AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID:-notset} \
-		-p 8888:8888 \
-		-p 8787:8787 \
-		--name ${CONTAINER_NAME} \
-		${IMAGE_NAME}:${IMAGE_TAG}
-
-.PHONY: stop-notebook
-stop-notebook:
-	@docker kill ${CONTAINER_NAME}
-	@docker rm ${CONTAINER_NAME}
-
 .PHONY: format
 format:
 	black .
 	isort .
 	nbqa isort . --nbqa-mutate
 	nbqa black . --nbqa-mutate
+
+LightGBM/README.md:
+	git clone --recursive https://github.com/microsoft/LightGBM.git
 
 .PHONY: lint
 lint: lint-dockerfiles
@@ -100,3 +67,36 @@ lint-dockerfiles:
 			hadolint/hadolint \
 		< $${dockerfile} || exit 1; \
 	done
+
+.PHONY: notebook-image
+notebook-image: LightGBM/README.md
+	docker build \
+		--no-cache \
+		-t ${IMAGE_NAME}:${IMAGE_TAG} \
+		-f Dockerfile-notebook \
+		--build-arg BASE_IMAGE=${BASE_IMAGE} \
+		.
+
+# https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html
+.PHONY: push-image
+push-image: create-repo
+	aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+	docker tag ${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} $$(cat ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):1
+	docker push $$(cat ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):1
+
+.PHONY: start-notebook
+start-notebook:
+	docker run \
+		--rm \
+		-v $$(pwd):/home/jovyan/testing \
+		--env AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY:-notset} \
+		--env AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID:-notset} \
+		-p 8888:8888 \
+		-p 8787:8787 \
+		--name ${CONTAINER_NAME} \
+		${IMAGE_NAME}:${IMAGE_TAG}
+
+.PHONY: stop-notebook
+stop-notebook:
+	@docker kill ${CONTAINER_NAME}
+	@docker rm ${CONTAINER_NAME}

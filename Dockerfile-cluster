@@ -4,7 +4,7 @@ COPY ./LightGBM /opt/LightGBM
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-ARG DASK_VERSION=2021.9.1
+ARG DASK_VERSION
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

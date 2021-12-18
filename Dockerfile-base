@@ -1,4 +1,5 @@
-FROM daskdev/dask-notebook:2021.9.1
+ARG DASK_VERSION
+FROM daskdev/dask-notebook:${DASK_VERSION}
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ARG DEBIAN_FRONTEND=noninteractive

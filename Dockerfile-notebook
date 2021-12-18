@@ -9,9 +9,9 @@ COPY LightGBM/LICENSE ${INSTALL_DIR}/LICENSE
 COPY LightGBM/python-package ${INSTALL_DIR}/python-package
 COPY LightGBM/VERSION.txt ${INSTALL_DIR}/VERSION.txt
 
-RUN cd ${INSTALL_DIR}/python-package && \
+RUN cd "${INSTALL_DIR}/python-package" && \
     python setup.py install --precompile && \
     cd /home/jovyan && \
-    rm -rf ${INSTALL_DIR}
+    rm -rf "${INSTALL_DIR}"
 
 WORKDIR /home/jovyan/testing/notebooks

@@ -10,6 +10,14 @@ This repository can be used to test and develop changes to LightGBM's Dask integ
 
 <hr>
 
+**Contents**
+
+- [Getting Started](#getting-started)
+- [Develop in Jupyter](#develop-in-jupyter)
+- [Test with a LocalCluster](#test-with-a-localcluster)
+- [Test with a FargetCluster](#test-with-a-fargetcluster)
+- [Run LightGBM unit tests](#run-lightgbm-unit-tests)
+
 ## Getting Started
 
 To begin, clone a copy of LightGBM to a folder `LightGBM` at the root of this repo. You can do this however you want, for example:
@@ -150,6 +158,21 @@ make delete-repo
 Then, repeat the steps above to rebuild your images and test again.
 
 <hr>
+
+## Run LightGBM unit tests
+
+This repo makes it easy to run `lightgbm`'s Dask unit tests in a containerized setup.
+
+```shell
+make lightgbm-unit-tests
+```
+
+Pass variable `DASK_VERSION` to use a different version of `dask` / `distributed`.
+
+```shell
+make lightgbm-unit-tests \
+    -e DASK_VERSION=2021.11.0
+```
 
 ## Useful Links
 

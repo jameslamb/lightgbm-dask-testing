@@ -78,6 +78,17 @@ LightGBM/lib_lightgbm.so: LightGBM/README.md
 		/bin/bash -cex \
 			"mkdir build && cd build && cmake .. && make -j2"
 
+.PHONY: lightgbm-unit-tests
+lightgbm-unit-tests: cluster-image
+	docker run \
+		--rm \
+		-v $$(pwd)/LightGBM:/opt/LightGBM \
+		--workdir=/opt/LightGBM \
+		--entrypoint="" \
+		-it ${CLUSTER_IMAGE} \
+		/bin/bash -cex \
+			"pip install pytest && pytest tests/python_package_test/test_dask.py"
+
 .PHONY: lint
 lint: lint-dockerfiles
 	isort --check .

@@ -9,7 +9,14 @@ NOTEBOOK_BASE_IMAGE=lightgbm-dask-testing-notebook-base:${DASK_VERSION}
 NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
 
-.PHONY: base-image
+.PHONY: clean
+clean:
+	docker rmi $$(docker images -q ${CLUSTER_IMAGE}) || true
+	docker rmi $$(docker images -q ${CLUSTER_BASE_IMAGE}) || true
+	docker rmi $$(docker images -q ${NOTEBOOK_IMAGE}) || true
+	docker rmi $$(docker images -q ${NOTEBOOK_BASE_IMAGE}) || true
+
+.PHONY: cluster-base-image
 cluster-base-image:
 	@if $$(docker image inspect ${CLUSTER_BASE_IMAGE} > /dev/null); then \
 		if test ${FORCE_REBUILD} -le 0; then \
@@ -21,13 +28,6 @@ cluster-base-image:
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		-t ${CLUSTER_BASE_IMAGE} \
 		- < Dockerfile-cluster-base
-
-.PHONY: clean
-clean:
-	docker rmi $$(docker images -q ${CLUSTER_IMAGE}) || true
-	docker rmi $$(docker images -q ${CLUSTER_BASE_IMAGE}) || true
-	docker rmi $$(docker images -q ${NOTEBOOK_IMAGE}) || true
-	docker rmi $$(docker images -q ${NOTEBOOK_BASE_IMAGE}) || true
 
 .PHONY: cluster-image
 cluster-image: cluster-base-image LightGBM/lib_lightgbm.so

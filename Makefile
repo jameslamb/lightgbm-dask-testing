@@ -1,8 +1,9 @@
 AWS_REGION=us-east-1
+DASK_VERSION=2021.9.1
 BASE_IMAGE=lightgbm-dask-testing-base:${DASK_VERSION}
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
-DASK_VERSION=2021.9.1
+CLUSTER_IMAGE=${CLUSTER_IMAGE_NAME}:${DASK_VERSION}
 FORCE_REBUILD=0
 NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
@@ -22,14 +23,15 @@ base-image:
 
 .PHONY: clean
 clean:
-	git clean -d -f -X
-	rm -rf ./LightGBM/
+	docker rmi $$(docker images -q ${BASE_IMAGE}) || true
+	docker rmi $$(docker images -q ${CLUSTER_IMAGE}) || true
+	docker rmi $$(docker images -q ${NOTEBOOK_IMAGE}) || true
 
 .PHONY: cluster-image
 cluster-image: LightGBM/lib_lightgbm.so
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
-		-t ${CLUSTER_IMAGE_NAME}:${DASK_VERSION} \
+		-t ${CLUSTER_IMAGE} \
 		-f Dockerfile-cluster \
 		.
 

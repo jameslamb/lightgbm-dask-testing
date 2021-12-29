@@ -1,6 +1,7 @@
 AWS_REGION=us-east-1
 DASK_VERSION=2021.9.1
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
+CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
 CLUSTER_IMAGE=${CLUSTER_IMAGE_NAME}:${DASK_VERSION}
 FORCE_REBUILD=0
@@ -8,17 +9,32 @@ NOTEBOOK_BASE_IMAGE=lightgbm-dask-testing-notebook-base:${DASK_VERSION}
 NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
 
+.PHONY: base-image
+cluster-base-image:
+	@if $$(docker image inspect ${CLUSTER_BASE_IMAGE} > /dev/null); then \
+		if test ${FORCE_REBUILD} -le 0; then \
+			echo "image '${CLUSTER_BASE_IMAGE}' already exists. To force rebuilding, run 'make cluster-base-image -e FORCE_REBUILD=1'."; \
+			exit 0; \
+		fi; \
+	fi; \
+	docker build \
+		--build-arg DASK_VERSION=${DASK_VERSION} \
+		-t ${CLUSTER_BASE_IMAGE} \
+		- < Dockerfile-cluster-base
+
 .PHONY: clean
 clean:
-	docker rmi $$(docker images -q ${NOTEBOOK_BASE_IMAGE}) || true
 	docker rmi $$(docker images -q ${CLUSTER_IMAGE}) || true
+	docker rmi $$(docker images -q ${CLUSTER_BASE_IMAGE}) || true
 	docker rmi $$(docker images -q ${NOTEBOOK_IMAGE}) || true
+	docker rmi $$(docker images -q ${NOTEBOOK_BASE_IMAGE}) || true
 
 .PHONY: cluster-image
-cluster-image: LightGBM/lib_lightgbm.so
+cluster-image: cluster-base-image LightGBM/lib_lightgbm.so
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		-t ${CLUSTER_IMAGE} \
+		--build-arg BASE_IMAGE=${CLUSTER_BASE_IMAGE} \
 		-f Dockerfile-cluster \
 		.
 
@@ -98,7 +114,7 @@ notebook-base-image:
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		-t ${NOTEBOOK_BASE_IMAGE} \
-		- < Dockerfile-base
+		- < Dockerfile-notebook-base
 
 .PHONY: notebook-image
 notebook-image: notebook-base-image LightGBM/lib_lightgbm.so

@@ -1,39 +1,17 @@
-FROM python:3.9-slim
-
+ARG BASE_IMAGE
 ARG INSTALL_DIR=/opt/LightGBMM
+
+# hadolint ignore=DL3006
+FROM ${BASE_IMAGE}
 
 COPY LightGBM/lib_lightgbm.so ${INSTALL_DIR}/lib_lightgbm.so
 COPY LightGBM/LICENSE ${INSTALL_DIR}/LICENSE
 COPY LightGBM/python-package ${INSTALL_DIR}/python-package
 COPY LightGBM/VERSION.txt ${INSTALL_DIR}/VERSION.txt
-ENV DEBIAN_FRONTEND=noninteractive
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 ARG DASK_VERSION
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        cmake \
-        libomp-dev && \
-    pip install --no-cache-dir \
-        blosc \
-        bokeh \
-        boto3 \
-        dask==${DASK_VERSION} \
-        dask-cloudprovider \
-        dask-ml \
-        distributed==${DASK_VERSION} \
-        lz4 \
-        numpy \
-        pandas \
-        scikit-learn && \
-    # install LightGBM
-    cd "${INSTALL_DIR}/python-package" && \
+RUN cd "${INSTALL_DIR}/python-package" && \
     python setup.py install --precompile && \
     cd /opt && \
-    rm -rf "${INSTALL_DIR}" && \
-    apt-get remove -y --purge \
-        cmake \
-        build-essential && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf "${INSTALL_DIR}"

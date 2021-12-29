@@ -1,17 +1,5 @@
-# unnecessary LightGBM files
-LightGBM/.appveyor.yml
-LightGBM/build-cran-package.sh
-LightGBM/build_r.R
-LightGBM/.editorconfig
-LightGBM/.github/*
-LightGBM/helpers/*
-LightGBM/.nuget/*
-LightGBM/pmml/*
-LightGBM/R-package/*
-
-# key material
-*.env
-*.pem
-*.pub
-*.rdp
-*_rsa
+*
+!LightGBM/lib_lightgbm.so
+!LightGBM/LICENSE
+!LightGBM/python-package
+!LightGBM/VERSION.txt

@@ -3,6 +3,7 @@ BASE_IMAGE=lightgbm-dask-testing-base:${DASK_VERSION}
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
 DASK_VERSION=2021.9.1
+FORCE_REBUILD=0
 NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
 
@@ -12,6 +13,12 @@ cluster-name:
 
 .PHONY: base-image
 base-image:
+	@if $$(docker image inspect ${BASE_IMAGE} > /dev/null); then \
+		if test ${FORCE_REBUILD} -le 0; then \
+			echo "image '${BASE_IMAGE}' already exists. To force rebuilding, run 'make base-image -e FORCE_REBUILD=1'."; \
+			exit 0; \
+		fi; \
+	fi; \
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		-t ${BASE_IMAGE} \
@@ -96,7 +103,7 @@ lint-dockerfiles:
 	done
 
 .PHONY: notebook-image
-notebook-image: LightGBM/README.md
+notebook-image: base-image LightGBM/lib_lightgbm.so
 	docker build \
 		-t ${NOTEBOOK_IMAGE} \
 		-f Dockerfile-notebook \

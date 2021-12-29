@@ -15,6 +15,3 @@ LightGBM/R-package/*
 *.pub
 *.rdp
 *_rsa
-
-# exclusions
-!image.env

@@ -1,0 +1,25 @@
+FROM python:3.9-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+
+ARG DASK_VERSION
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+        libomp-dev && \
+    pip install --no-cache-dir \
+        blosc \
+        bokeh \
+        boto3 \
+        dask==${DASK_VERSION} \
+        dask-cloudprovider \
+        dask-ml \
+        distributed==${DASK_VERSION} \
+        lz4 \
+        numpy \
+        pandas \
+        scikit-learn && \
+    rm -rf /var/lib/apt/lists/*

@@ -458,7 +458,4 @@ dask-worker-space/
 *.rdp
 *_rsa
 
-# exclusions
-!image.env
-
 Untitled*.ipynb

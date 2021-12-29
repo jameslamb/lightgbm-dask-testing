@@ -26,37 +26,20 @@ If you're developing a reproducible example for [an issue](https://github.com/mi
 
 This section describes how to test a version of LightGBM in Jupyter.
 
-#### 1. Set `IMAGE_NAME` in `image.env` to something random.
 
-I like to do this by generating a UUID.
+#### 1. Build the notebook image
 
-```shell
-python -c "import uuid; print(str(uuid.uuid4()))"
-```
-
-Open `image.env`, and replace the existing value of `IMAGE_NAME` with one that ends with that UUID. This will be used to control the image tags used in later steps, and you want it to be totally unique to you.
-
-#### 2. Build the base image
-
-Some dependencies needed to test LightGBM aren't going to change over the course of your development...things like `cmake` and `scikit-learn`. So these should be installed one time in a base image.
-
-```shell
-make base-image
-```
-
-This base image is based on https://github.com/dask/dask-docker/tree/master/notebook.
-
-You'll probably only need to run this once during development.
-
-#### 3. Build the notebook image
-
-The notebook image is built from the base image, but it has your local copy of `LightGBM/` installed inside it. You'll probably rebuild this image many times during development, as you test your changes.
+Run the following to build an image that includes `lightgbm`, all its dependencies, and a JupyterLab setup.
 
 ```shell
 make notebook-image
 ```
 
-#### 4. Run a notebook locally
+The first time you run this, it will take a few minutes as this project needs to build a base image with LightGBM's dependencies and needs to compile the LightGBM C++ library.
+
+Every time after that, `make notebook-image` should run very quickly.
+
+#### 2. Run a notebook locally
 
 Start up Jupyter Lab! This command will run Jupyter Lab in a container using the image you built with `make notebook-image`.
 

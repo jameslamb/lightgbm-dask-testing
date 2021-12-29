@@ -1,29 +1,16 @@
 AWS_REGION=us-east-1
 DASK_VERSION=2021.9.1
-BASE_IMAGE=lightgbm-dask-testing-base:${DASK_VERSION}
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
 CLUSTER_IMAGE=${CLUSTER_IMAGE_NAME}:${DASK_VERSION}
 FORCE_REBUILD=0
+NOTEBOOK_BASE_IMAGE=lightgbm-dask-testing-notebook-base:${DASK_VERSION}
 NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
 
-.PHONY: base-image
-base-image:
-	@if $$(docker image inspect ${BASE_IMAGE} > /dev/null); then \
-		if test ${FORCE_REBUILD} -le 0; then \
-			echo "image '${BASE_IMAGE}' already exists. To force rebuilding, run 'make base-image -e FORCE_REBUILD=1'."; \
-			exit 0; \
-		fi; \
-	fi; \
-	docker build \
-		--build-arg DASK_VERSION=${DASK_VERSION} \
-		-t ${BASE_IMAGE} \
-		- < Dockerfile-base
-
 .PHONY: clean
 clean:
-	docker rmi $$(docker images -q ${BASE_IMAGE}) || true
+	docker rmi $$(docker images -q ${NOTEBOOK_BASE_IMAGE}) || true
 	docker rmi $$(docker images -q ${CLUSTER_IMAGE}) || true
 	docker rmi $$(docker images -q ${NOTEBOOK_IMAGE}) || true
 
@@ -71,7 +58,7 @@ LightGBM/lib_lightgbm.so: LightGBM/README.md
 		-v $$(pwd)/LightGBM:/opt/LightGBM \
 		--workdir=/opt/LightGBM \
 		--entrypoint="" \
-		-it ${BASE_IMAGE} \
+		-it ${NOTEBOOK_BASE_IMAGE} \
 		/bin/bash -cex \
 			"mkdir build && cd build && cmake .. && make -j2"
 
@@ -100,12 +87,25 @@ lint-dockerfiles:
 		< $${dockerfile} || exit 1; \
 	done
 
+.PHONY: notebook-base-image
+notebook-base-image:
+	@if $$(docker image inspect ${NOTEBOOK_BASE_IMAGE} > /dev/null); then \
+		if test ${FORCE_REBUILD} -le 0; then \
+			echo "image '${NOTEBOOK_BASE_IMAGE}' already exists. To force rebuilding, run 'make notebook-base-image -e FORCE_REBUILD=1'."; \
+			exit 0; \
+		fi; \
+	fi; \
+	docker build \
+		--build-arg DASK_VERSION=${DASK_VERSION} \
+		-t ${NOTEBOOK_BASE_IMAGE} \
+		- < Dockerfile-base
+
 .PHONY: notebook-image
-notebook-image: base-image LightGBM/lib_lightgbm.so
+notebook-image: notebook-base-image LightGBM/lib_lightgbm.so
 	docker build \
 		-t ${NOTEBOOK_IMAGE} \
 		-f Dockerfile-notebook \
-		--build-arg BASE_IMAGE=${BASE_IMAGE} \
+		--build-arg BASE_IMAGE=${NOTEBOOK_BASE_IMAGE} \
 		.
 
 # https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html

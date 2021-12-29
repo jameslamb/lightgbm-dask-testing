@@ -7,10 +7,6 @@ FORCE_REBUILD=0
 NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
 
-cluster-name:
-	@echo ${USER_SLUG}
-	@echo ${CLUSTER_IMAGE_NAME}
-
 .PHONY: base-image
 base-image:
 	@if $$(docker image inspect ${BASE_IMAGE} > /dev/null); then \

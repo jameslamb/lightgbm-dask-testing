@@ -108,7 +108,7 @@ pip install --upgrade awscli
 
 Next, configure your shell to make authenticated requests to AWS. If you've never done this, you can see [the AWS CLI docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 
-The rest of this section assums that the shell variables `AWS_SECRET_ACCESS_KEY`, `AWS_ACCESS_KEY_ID`, and `AWS_DEFAULT_REGION` have been set.
+The rest of this section assums that the shell variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` have been sett.
 
 I like to set these by keeping them in a file
 
@@ -116,7 +116,6 @@ I like to set these by keeping them in a file
 # file: aws.env
 AWS_SECRET_ACCESS_KEY=your-key-here
 AWS_ACCESS_KEY_ID=your-access-key-id-here
-AWS_DEFAULT_REGION=us-east-1
 ```
 
 and then sourcing that file

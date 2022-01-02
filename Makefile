@@ -1,4 +1,4 @@
-AWS_REGION=us-east-1
+AWS_REGION=us-west-2
 DASK_VERSION=2021.9.1
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
@@ -43,17 +43,17 @@ create-repo: ecr-details.json
 
 .PHONY: delete-repo
 delete-repo:
-	aws --region us-east-1 \
+	aws --region ${AWS_REGION} \
 		ecr-public batch-delete-image \
 			--repository-name ${CLUSTER_IMAGE_NAME} \
 			--image-ids imageTag=${DASK_VERSION}
-	aws --region us-east-1 \
+	aws --region ${AWS_REGION} \
 		ecr-public delete-repository \
 			--repository-name ${CLUSTER_IMAGE_NAME}
 	rm -f ./ecr-details.json
 
 ecr-details.json:
-	aws --region us-east-1 \
+	aws --region ${AWS_REGION} \
 		ecr-public create-repository \
 			--repository-name ${CLUSTER_IMAGE_NAME} \
 	> ./ecr-details.json
@@ -155,7 +155,7 @@ start-notebook:
 		--rm \
 		-v $$(pwd):/home/jovyan/testing \
 		--env AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID:-notset} \
-		--env AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
+		--env AWS_DEFAULT_REGION=${AWS_REGION} \
 		--env AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY:-notset} \
 		-p 8888:8888 \
 		-p 8787:8787 \

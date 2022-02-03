@@ -22,4 +22,84 @@ RUN apt-get update && \
         numpy \
         pandas \
         scikit-learn && \
+    # clean up large files
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -name '*.c' \
+         -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -name '*.cpp' \
+         -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -name '*.h' \
+         -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -name '*.hpp' \
+         -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*botocore/data/cloudfront*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*botocore/data/sagemaker*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*dask/*tests/*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*dask_cloudprovider/*tests/*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*joblib/test/*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*numba/*tests/*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*numpy/*tests/*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*pandas/*tests/*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*scikit-learn/tests*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*scikit-learn/*/tests*' \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        -wholename '*scipy/*/tests*' \
+        -exec rm '{}' '+' && \
+    find \
+        -name '__pycache__' \
+        -type d \
+        -exec rm -rf '{}' '+' && \
     rm -rf /var/lib/apt/lists/*

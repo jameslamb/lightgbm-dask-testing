@@ -9,8 +9,6 @@ COPY LightGBM/LICENSE ${INSTALL_DIR}/LICENSE
 COPY LightGBM/python-package ${INSTALL_DIR}/python-package
 COPY LightGBM/VERSION.txt ${INSTALL_DIR}/VERSION.txt
 
-ARG DASK_VERSION
-
 RUN cd "${INSTALL_DIR}/python-package" && \
     python setup.py install --precompile && \
     cd /opt && \

@@ -22,7 +22,7 @@ RUN apt-get update && \
         numpy \
         pandas \
         scikit-learn && \
-    # clean up large files
+    # remove unnecessary file
     find \
         /usr/local/lib/python3.9/site-packages \
         -type f \

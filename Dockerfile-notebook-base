@@ -1,8 +1,12 @@
 ARG DASK_VERSION
 FROM daskdev/dask-notebook:${DASK_VERSION}
 
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-ARG DEBIAN_FRONTEND=noninteractive
+ARG DASK_VERSION
+ENV \
+    DASK_VERSION=${DASK_VERSION} \
+    DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 
 RUN apt-get update && \
     apt-get install -y \

@@ -1,7 +1,9 @@
 FROM python:3.9-slim
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV \
+    DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 
 ARG DASK_VERSION
 
@@ -13,9 +15,7 @@ RUN apt-get update && \
     pip install --no-cache-dir \
         blosc \
         bokeh \
-        boto3 \
         dask==${DASK_VERSION} \
-        dask-cloudprovider \
         dask-ml \
         distributed==${DASK_VERSION} \
         lz4 \
@@ -32,18 +32,35 @@ RUN apt-get update && \
         -o -name '*.cpp' \
         -o -name '*.h' \
         -o -name '*.hpp' \
+        -o -wholename '*bokeh/sampledata/*' \
+        -o -wholename '*boto3/examples*' \
         -o -wholename '*botocore/data/cloudfront*' \
+        -o -wholename '*botocore/data/elasticache*' \
+        -o -wholename '*botocore/data/gamelift*' \
+        -o -wholename '*botocore/data/iot*' \
+        -o -wholename '*botocore/data/lightsail*' \
+        -o -wholename '*botocore/data/mediaconvert*' \
+        -o -wholename '*botocore/data/medialive*' \
+        -o -wholename '*botocore/data/pinpoint*' \
         -o -wholename '*botocore/data/sagemaker*' \
         -o -wholename '*dask/*tests/*' \
         -o -wholename '*dask_cloudprovider/*tests/*' \
         -o -wholename '*joblib/test/*' \
+        -o -wholename '*llvmlite/tests/*' \
         -o -wholename '*numba/*tests/*' \
         -o -wholename '*numpy/*tests/*' \
         -o -wholename '*pandas/*tests/*' \
         -o -wholename '*scikit-learn/tests*' \
         -o -wholename '*scikit-learn/*/tests*' \
         -o -wholename '*scipy/*/tests*' \
+        -o -wholename '*tornado/test/*' \
         -o -wholename '*/__pycache__/*' \
         \) \
         -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type d \
+        -wholename '*__pycache__*' \
+        -exec rm -rf '{}' '+' && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*

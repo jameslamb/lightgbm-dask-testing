@@ -6,7 +6,9 @@ FROM ${BASE_IMAGE}
 RUN pip install --no-cache-dir \
         memray \
         pytest \
+        pytest-memray \
         pytest-profiling \
         snakeviz
 
 COPY bin/profile-examples.sh /usr/local/bin/profile-examples.sh
+COPY bin/profile-example-memory-usage.sh /usr/local/bin/profile-example-memory-usage.sh

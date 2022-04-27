@@ -187,6 +187,14 @@ make profile
 
 Then navigate to `http://0.0.0.0:8080/snakeviz/%2Fprofiling-output` in your web browser.
 
+### memory profiling
+
+To summarize memory allocations in typical uses of LightGBM, and to attribute those memory allocations to particular codepaths, you can run its examples under `memray` ([link](https://github.com/bloomberg/memray)).
+
+```shell
+make profile-memory-usage
+```
+
 ## Useful Links
 
 * https://github.com/microsoft/LightGBM/pull/3515

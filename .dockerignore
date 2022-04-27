@@ -1,5 +1,6 @@
 *
 !bin/profile-examples.sh
+!bin/profile-example-memory-usage.sh
 !LightGBM/lib_lightgbm.so
 !LightGBM/LICENSE
 !LightGBM/python-package

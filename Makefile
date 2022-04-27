@@ -158,12 +158,26 @@ profiling-image: cluster-image
 			echo "image '${PROFILING_IMAGE}' already exists. To force rebuilding, run 'make profiling-image -e FORCE_REBUILD_PROFILING_IMAGE=1'."; \
 			exit 0; \
 		fi; \
-	fi;
+	fi && \
 	docker build \
 		-t ${PROFILING_IMAGE} \
 		--build-arg BASE_IMAGE=${CLUSTER_IMAGE} \
 		-f Dockerfile-profiling \
 		.
+
+.PHONY: profile-memory-usage
+profile-memory-usage: profiling-image
+	docker run \
+		--rm \
+		--env LIGHTGBM_HOME=/opt/LightGBM \
+		--env PROFILING_OUTPUT_DIR=/profiling-output/memory-usage \
+		-v $$(pwd)/profiling-output:/profiling-output \
+		-v $$(pwd)/LightGBM:/opt/LightGBM \
+		--workdir=/opt/LightGBM \
+		--entrypoint="" \
+		-it ${PROFILING_IMAGE} \
+		/bin/bash -cex \
+			'/bin/bash /usr/local/bin/profile-example-memory-usage.sh'
 
 # https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html
 .PHONY: push-image

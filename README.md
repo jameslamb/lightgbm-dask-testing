@@ -17,6 +17,8 @@ This repository can be used to test and develop changes to LightGBM's Dask integ
 - [Test with a LocalCluster](#test-with-a-localcluster)
 - [Test with a FargetCluster](#test-with-a-fargetcluster)
 - [Run LightGBM unit tests](#run-lightgbm-unit-tests)
+- [Profile LightGBM code](#profiling)
+    - [runtime profiling](#runtime-profiling)
 
 ## Getting Started
 
@@ -172,6 +174,18 @@ Pass variable `DASK_VERSION` to use a different version of `dask` / `distributed
 make lightgbm-unit-tests \
     -e DASK_VERSION=2021.11.0
 ```
+
+## Profile LightGBM code <a name="profiling"></a>
+
+### runtime profiling
+
+To try to identify expensive parts of the code path for `lightgbm`, you can run its examples under `cProfile` ([link](https://docs.python.org/3/library/profile.html)) and then visualize those profiling results with `snakeviz` ([link](https://jiffyclub.github.io/snakeviz/)).
+
+```shell
+make profile
+```
+
+Then navigate to `http://0.0.0.0:8080/snakeviz/%2Fprofiling-output` in your web browser.
 
 ## Useful Links
 

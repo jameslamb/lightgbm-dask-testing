@@ -7,9 +7,11 @@ CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
 CLUSTER_IMAGE=${CLUSTER_IMAGE_NAME}:${DASK_VERSION}
 FORCE_REBUILD=0
+FORCE_REBUILD_PROFILING_IMAGE=0
 NOTEBOOK_BASE_IMAGE=lightgbm-dask-testing-notebook-base:${DASK_VERSION}
 NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
+PROFILING_IMAGE=lightgbm-dask-testing-profiling:${DASK_VERSION}
 
 .PHONY: clean
 clean:
@@ -17,6 +19,7 @@ clean:
 	docker rmi $$(docker images -q ${CLUSTER_BASE_IMAGE}) || true
 	docker rmi $$(docker images -q ${NOTEBOOK_IMAGE}) || true
 	docker rmi $$(docker images -q ${NOTEBOOK_BASE_IMAGE}) || true
+	docker rmi $$(docker images -q ${PROFILING_IMAGE}) || true
 
 .PHONY: cluster-base-image
 cluster-base-image:
@@ -131,6 +134,35 @@ notebook-image: notebook-base-image LightGBM/lib_lightgbm.so
 		-t ${NOTEBOOK_IMAGE} \
 		-f Dockerfile-notebook \
 		--build-arg BASE_IMAGE=${NOTEBOOK_BASE_IMAGE} \
+		.
+
+.PHONY: profile
+profile: profiling-image
+	docker run \
+		--rm \
+		-p 8080:8080 \
+		--env LIGHTGBM_HOME=/opt/LightGBM \
+		--env PROFILING_OUTPUT_DIR=/profiling-output \
+		-v $$(pwd)/profiling-output:/profiling-output \
+		-v $$(pwd)/LightGBM:/opt/LightGBM \
+		--workdir=/opt/LightGBM \
+		--entrypoint="" \
+		-it ${PROFILING_IMAGE} \
+		/bin/bash -cex \
+			'/bin/bash /usr/local/bin/profile-examples.sh && python -m snakeviz /profiling-output/ --hostname 0.0.0.0 --server'
+
+.PHONY: profiling-image
+profiling-image: cluster-image
+	@if $$(docker image inspect ${PROFILING_IMAGE} > /dev/null); then \
+		if test ${FORCE_REBUILD_PROFILING_IMAGE} -le 0; then \
+			echo "image '${PROFILING_IMAGE}' already exists. To force rebuilding, run 'make profiling-image -e FORCE_REBUILD_PROFILING_IMAGE=1'."; \
+			exit 0; \
+		fi; \
+	fi;
+	docker build \
+		-t ${PROFILING_IMAGE} \
+		--build-arg BASE_IMAGE=${CLUSTER_IMAGE} \
+		-f Dockerfile-profiling \
 		.
 
 # https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html

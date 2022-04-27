@@ -1,4 +1,5 @@
 *
+!bin/profile-examples.sh
 !LightGBM/lib_lightgbm.so
 !LightGBM/LICENSE
 !LightGBM/python-package

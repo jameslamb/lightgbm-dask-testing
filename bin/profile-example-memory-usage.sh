@@ -7,7 +7,7 @@
 set -e -u -o pipefail
 
 echo "profiling examples"
-mkdir -p "${PROFILING_OUTPUT_DIR}"
+mkdir -p "${PROFILING_OUTPUT_DIR}/bin"
 for py_script in $(find "${LIGHTGBM_HOME}/examples/python-guide" -name '*.py'); do
     base_filename=$(basename "${py_script}")
     prof_file=$(echo "${base_filename}" | sed -e 's/\.py/\.bin/g')
@@ -20,17 +20,17 @@ for py_script in $(find "${LIGHTGBM_HOME}/examples/python-guide" -name '*.py'); 
         "${py_script}" 2>&1 > /dev/null \
     || true
     memray table \
-        -o "${PROFILING_OUTPUT_DIR}/bin/${table_file}" \
+        -o "${PROFILING_OUTPUT_DIR}/${table_file}" \
         --force \
-        "${PROFILING_OUTPUT_DIR}/${prof_file}"
+        "${PROFILING_OUTPUT_DIR}/bin/${prof_file}"
     memray table \
-        -o "${PROFILING_OUTPUT_DIR}/bin/${leak_table_file}" \
+        -o "${PROFILING_OUTPUT_DIR}/${leak_table_file}" \
         --force \
         --leaks \
         "${PROFILING_OUTPUT_DIR}/bin/${prof_file}"
     memray flamegraph \
-        -o "${PROFILING_OUTPUT_DIR}/bin/${flamegraph_file}" \
+        -o "${PROFILING_OUTPUT_DIR}/${flamegraph_file}" \
         --force \
-        "${PROFILING_OUTPUT_DIR}/${prof_file}"
+        "${PROFILING_OUTPUT_DIR}/bin/${prof_file}"
 done
 echo "Done profiling examples. See '${PROFILING_OUTPUT_DIR}' for results."

@@ -140,6 +140,7 @@ notebook-image: notebook-base-image LightGBM/lib_lightgbm.so
 profile: profiling-image
 	docker run \
 		--rm \
+		-p 8080:8080 \
 		--env LIGHTGBM_HOME=/opt/LightGBM \
 		--env PROFILING_OUTPUT_DIR=/profiling-output \
 		-v $$(pwd)/profiling-output:/profiling-output \

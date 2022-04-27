@@ -26,6 +26,7 @@ LightGBM/
 *.ppt
 *.pptm
 *.pptx
+profiling-output/
 *.pq
 *.pyc
 __pycache/

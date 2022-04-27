@@ -149,7 +149,7 @@ profile: profiling-image
 		--entrypoint="" \
 		-it ${PROFILING_IMAGE} \
 		/bin/bash -cex \
-			'/bin/bash /usr/local/bin/profile-examples.sh && python -m snakeviz ${PROFILING_OUTPUT_DIR}/ --hostname 0.0.0.0 --server'
+			'/bin/bash /usr/local/bin/profile-examples.sh && python -m snakeviz /profiling-output/ --hostname 0.0.0.0 --server'
 
 .PHONY: profiling-image
 profiling-image: cluster-image

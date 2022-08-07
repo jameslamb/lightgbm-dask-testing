@@ -1,7 +1,7 @@
 # NOTE: using us-east-1 because it is the only region that supports
 #       ECR BatchDeleteImage()
 AWS_REGION=us-east-1
-DASK_VERSION=2021.9.1
+DASK_VERSION=2022.7.0
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
@@ -183,7 +183,7 @@ push-image: create-repo
 start-notebook:
 	docker run \
 		--rm \
-		-v $$(pwd):/home/jovyan/testing \
+		-v $$(pwd):/root/testing \
 		--env AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID:-notset} \
 		--env AWS_DEFAULT_REGION=${AWS_REGION} \
 		--env AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY:-notset} \

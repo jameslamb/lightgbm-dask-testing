@@ -11,6 +11,8 @@ dask-worker-space/
 *.doc
 *.docm
 *.docx
+.DS_Store
+*.egg-info/
 *.env
 *.exe
 .idea/
@@ -40,6 +42,7 @@ __pycache/
 *.train
 *.txt
 Untitled*.ipynb
+*.whl
 *.xls
 *.xlsm
 *.xlsx

@@ -20,6 +20,8 @@ clean:
 	docker rmi $$(docker images -q ${NOTEBOOK_IMAGE}) || true
 	docker rmi $$(docker images -q ${NOTEBOOK_BASE_IMAGE}) || true
 	docker rmi $$(docker images -q ${PROFILING_IMAGE}) || true
+	rm -rf ./LightGBM/build
+	rm -f ./LightGBM/lib_lightgbm.so
 
 .PHONY: cluster-base-image
 cluster-base-image:

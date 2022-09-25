@@ -1,5 +1,5 @@
 ARG BASE_IMAGE
-ARG INSTALL_DIR=/home/jovyan/testing/LightGBM
+ARG INSTALL_DIR=/root/testing/LightGBM
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
@@ -11,7 +11,7 @@ COPY LightGBM/VERSION.txt ${INSTALL_DIR}/VERSION.txt
 
 RUN cd "${INSTALL_DIR}/python-package" && \
     python setup.py install --precompile && \
-    cd /home/jovyan && \
+    cd /root/ && \
     rm -rf "${INSTALL_DIR}"
 
-WORKDIR /home/jovyan/testing/notebooks
+WORKDIR /root/testing/notebooks

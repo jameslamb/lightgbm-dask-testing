@@ -72,10 +72,10 @@ format:
 	nbqa isort .
 	nbqa black .
 
-LightGBM/README.md:
+"LightGBM/README.md":
 	git clone --recursive https://github.com/microsoft/LightGBM.git
 
-LightGBM/lib_lightgbm.so: LightGBM/README.md
+"LightGBM/lib_lightgbm.so": LightGBM/README.md notebook-base-image
 	docker run \
 		--rm \
 		-v $$(pwd)/LightGBM:/opt/LightGBM \

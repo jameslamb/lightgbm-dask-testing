@@ -1,7 +1,7 @@
 # NOTE: using us-east-1 because it is the only region that supports
 #       ECR BatchDeleteImage()
 AWS_REGION=us-east-1
-DASK_VERSION=2022.7.0
+DASK_VERSION=2022.11.1
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
@@ -37,7 +37,7 @@ cluster-base-image:
 		- < Dockerfile-cluster-base
 
 .PHONY: cluster-image
-cluster-image: cluster-base-image LightGBM/lib_lightgbm.so
+cluster-image: cluster-base-image "LightGBM/lib_lightgbm.so"
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		-t ${CLUSTER_IMAGE} \
@@ -75,7 +75,8 @@ format:
 "LightGBM/README.md":
 	git clone --recursive https://github.com/microsoft/LightGBM.git
 
-"LightGBM/lib_lightgbm.so": LightGBM/README.md notebook-base-image
+"LightGBM/lib_lightgbm.so": LightGBM/README.md
+	make notebook-base-image
 	docker run \
 		--rm \
 		-v $$(pwd)/LightGBM:/opt/LightGBM \
@@ -86,7 +87,7 @@ format:
 			"mkdir build && cd build && cmake .. && make -j2"
 
 .PHONY: lightgbm-unit-tests
-lightgbm-unit-tests: cluster-image
+lightgbm-unit-tests:
 	docker run \
 		--rm \
 		-v $$(pwd)/LightGBM:/opt/LightGBM \
@@ -94,7 +95,7 @@ lightgbm-unit-tests: cluster-image
 		--entrypoint="" \
 		-it ${CLUSTER_IMAGE} \
 		/bin/bash -cex \
-			"pip install pytest && pytest tests/python_package_test/test_dask.py"
+			"cd python-package/ && python setup.py install --precompile && cd ../ && pip install pytest && pytest -vv -rA tests/python_package_test/test_dask.py"
 
 .PHONY: lint
 lint: lint-dockerfiles
@@ -131,7 +132,7 @@ notebook-base-image:
 		- < Dockerfile-notebook-base
 
 .PHONY: notebook-image
-notebook-image: notebook-base-image LightGBM/lib_lightgbm.so
+notebook-image: notebook-base-image "LightGBM/lib_lightgbm.so"
 	docker build \
 		-t ${NOTEBOOK_IMAGE} \
 		-f Dockerfile-notebook \

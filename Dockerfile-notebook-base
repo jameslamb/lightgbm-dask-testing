@@ -1,7 +1,7 @@
-ARG DASK_VERSION
-FROM daskdev/dask-notebook:${DASK_VERSION}
+FROM python:3.9-slim
 
 ARG DASK_VERSION
+
 ENV \
     DASK_VERSION=${DASK_VERSION} \
     DEBIAN_FRONTEND=noninteractive \
@@ -9,19 +9,53 @@ ENV \
     LC_ALL=C.UTF-8
 
 RUN apt-get update && \
-    apt-get install -y \
-        --no-install-recommends \
+    apt-get install -y --no-install-recommends \
         build-essential \
         cmake \
         libomp-dev && \
-    rm -rf /var/lib/apt/lists/* && \
-    conda install -y \
-        -c conda-forge \
-        --override-channels \
-            boto3 \
-            dask-cloudprovider \
-            scikit-learn \
-            dask-ml \
-            numpy \
-            pandas && \
-    conda clean --yes --all
+    pip install --no-cache-dir \
+        blosc \
+        bokeh \
+        boto3 \
+        dask==${DASK_VERSION} \
+        dask-cloudprovider \
+        dask-ml \
+        distributed==${DASK_VERSION} \
+        jupyterlab \
+        lz4 \
+        numpy \
+        pandas \
+        scikit-learn && \
+    # remove unnecessary file
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type f \
+        \( \
+        -name '*.c' \
+        -o -name '*.cc' \
+        -o -name '*.cpp' \
+        -o -name '*.h' \
+        -o -name '*.hpp' \
+        -o -wholename '*bokeh/sampledata/*' \
+        -o -wholename '*dask/*tests/*' \
+        -o -wholename '*joblib/test/*' \
+        -o -wholename '*llvmlite/tests/*' \
+        -o -wholename '*numba/*tests/*' \
+        -o -wholename '*numpy/*tests/*' \
+        -o -wholename '*pandas/*tests/*' \
+        -o -wholename '*scikit-learn/tests*' \
+        -o -wholename '*scikit-learn/*/tests*' \
+        -o -wholename '*scipy/*/tests*' \
+        -o -wholename '*tornado/test/*' \
+        -o -wholename '*/__pycache__/*' \
+        \) \
+        -exec rm '{}' '+' && \
+    find \
+        /usr/local/lib/python3.9/site-packages \
+        -type d \
+        -wholename '*__pycache__*' \
+        -exec rm -rf '{}' '+' && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--port=8888"]

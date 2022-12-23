@@ -13,6 +13,9 @@ NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
 PROFILING_IMAGE=lightgbm-dask-testing-profiling:${DASK_VERSION}
 
+LIB_LIGHTGBM=${PWD}/LightGBM/lib_lightgbm.so
+LIGHTGBM_REPO=${PWD}/LightGBM/README.md
+
 .PHONY: clean
 clean:
 	docker rmi $$(docker images -q ${CLUSTER_IMAGE}) || true
@@ -37,7 +40,7 @@ cluster-base-image:
 		- < Dockerfile-cluster-base
 
 .PHONY: cluster-image
-cluster-image: cluster-base-image "LightGBM/lib_lightgbm.so"
+cluster-image: cluster-base-image $(LIB_LIGHTGBM)
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		-t ${CLUSTER_IMAGE} \
@@ -72,10 +75,10 @@ format:
 	nbqa isort .
 	nbqa black .
 
-"LightGBM/README.md":
+$(LIGHTGBM_REPO):
 	git clone --recursive https://github.com/microsoft/LightGBM.git
 
-"LightGBM/lib_lightgbm.so": LightGBM/README.md
+$(LIB_LIGHTGBM): $(LIGHTGBM_REPO)
 	make notebook-base-image
 	docker run \
 		--rm \
@@ -132,7 +135,7 @@ notebook-base-image:
 		- < Dockerfile-notebook-base
 
 .PHONY: notebook-image
-notebook-image: notebook-base-image "LightGBM/lib_lightgbm.so"
+notebook-image: notebook-base-image $(LIB_LIGHTGBM)
 	docker build \
 		-t ${NOTEBOOK_IMAGE} \
 		-f Dockerfile-notebook \

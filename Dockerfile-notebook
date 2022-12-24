@@ -4,6 +4,7 @@ ARG INSTALL_DIR=/root/testing/LightGBM
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
+COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 COPY LightGBM/lib_lightgbm.so ${INSTALL_DIR}/lib_lightgbm.so
 COPY LightGBM/LICENSE ${INSTALL_DIR}/LICENSE
 COPY LightGBM/python-package ${INSTALL_DIR}/python-package

@@ -51,26 +51,18 @@ Every time after that, `make notebook-image` should run very quickly.
 
 #### 2. Run a notebook locally
 
-Start up Jupyter Lab! This command will run Jupyter Lab in a container using the image you built with `make notebook-image`.
+Start up Jupyter Lab!
+This command will run Jupyter Lab in a container using the image you built with `make notebook-image`.
 
 ```shell
 make start-notebook
 ```
 
-After running this command, you'll see some output like this:
+Navigate to `http://127.0.0.1:8888/lab` in your web browser.
 
-```text
-[C 23:03:44.234 LabApp]
-    To access the notebook, open this file in a browser:
-        file:///home/jovyan/.local/share/jupyter/runtime/nbserver-19-open.html
-    Or copy and paste one of these URLs:
-        http://d96d64837199:8888/?token=e8aa897c8afbbbc559976854a78cc9effe957a912270f7bf
-     or http://127.0.0.1:8888/?token=e8aa897c8afbbbc559976854a78cc9effe957a912270f7bf
-```
-
-Copy the URL starting with `http://127.0.0.1` and paste it into your web browser. This will open Jupyter Lab.
-
-The command `make start-notebook` mounts your current working directory into the running container. That means that even though Jupyter Lab is running inside the container, changes that you make in it will be saved on your local filesystem even after you shut the container down. So you can edit and create notebooks and other code in there with confidence!
+The command `make start-notebook` mounts your current working directory into the running container.
+That means that even though Jupyter Lab is running inside the container, changes that you make in it will be saved on your local filesystem even after you shut the container down.
+So you can edit and create notebooks and other code in there with confidence!
 
 When you're done with the notebook, stop the container by running the following from another shell:
 

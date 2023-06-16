@@ -12,8 +12,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
         cmake \
-        libomp-dev && \
-    pip install --no-cache-dir \
+        libomp-dev \
+        ninja-build && \
+    pip install --prefer-binary --no-cache-dir \
         blosc \
         bokeh \
         boto3 \

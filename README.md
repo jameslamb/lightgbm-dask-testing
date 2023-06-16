@@ -164,7 +164,7 @@ Pass variable `DASK_VERSION` to use a different version of `dask` / `distributed
 
 ```shell
 make lightgbm-unit-tests \
-    -e DASK_VERSION=2021.11.0
+    -e DASK_VERSION=2023.4.0
 ```
 
 ## Profile LightGBM code <a name="profiling"></a>

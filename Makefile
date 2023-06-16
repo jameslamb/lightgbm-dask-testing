@@ -1,7 +1,7 @@
 # NOTE: using us-east-1 because it is the only region that supports
 #       ECR BatchDeleteImage()
 AWS_REGION=us-east-1
-DASK_VERSION=2022.11.1
+DASK_VERSION=2023.5.0
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}

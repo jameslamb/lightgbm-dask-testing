@@ -5,13 +5,10 @@ ARG INSTALL_DIR=/root/testing/LightGBM
 FROM ${BASE_IMAGE}
 
 COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
-COPY LightGBM/lib_lightgbm.so ${INSTALL_DIR}/lib_lightgbm.so
-COPY LightGBM/LICENSE ${INSTALL_DIR}/LICENSE
-COPY LightGBM/python-package ${INSTALL_DIR}/python-package
-COPY LightGBM/VERSION.txt ${INSTALL_DIR}/VERSION.txt
+COPY LightGBM/ ${INSTALL_DIR}/
 
-RUN cd "${INSTALL_DIR}/python-package" && \
-    python setup.py install --precompile && \
+RUN cd "${INSTALL_DIR}" && \
+    sh ./build-python.sh install --precompile && \
     cd /root/ && \
     rm -rf "${INSTALL_DIR}"
 

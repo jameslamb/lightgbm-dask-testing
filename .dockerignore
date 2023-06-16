@@ -2,7 +2,15 @@
 !bin/profile-examples.sh
 !bin/profile-example-memory-usage.sh
 !jupyter_notebook_config.py
+!LightGBM/build-python.sh
+!LightGBM/cmake
+!LightGBM/CMakeLists.txt
+!LightGBM/external_libs
+!LightGBM/include
 !LightGBM/lib_lightgbm.so
 !LightGBM/LICENSE
 !LightGBM/python-package
+!LightGBM/src
+!LightGBM/swig
+!LightGBM/windows
 !LightGBM/VERSION.txt

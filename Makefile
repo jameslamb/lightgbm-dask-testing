@@ -87,7 +87,7 @@ $(LIB_LIGHTGBM): $(LIGHTGBM_REPO)
 		--entrypoint="" \
 		-it ${NOTEBOOK_BASE_IMAGE} \
 		/bin/bash -cex \
-			"mkdir build && cd build && cmake .. && make -j2"
+			"rm -rf ./build && mkdir build && cd build && cmake -G Ninja .. && ninja -j2 _lightgbm"
 
 .PHONY: lightgbm-unit-tests
 lightgbm-unit-tests:
@@ -98,7 +98,7 @@ lightgbm-unit-tests:
 		--entrypoint="" \
 		-it ${CLUSTER_IMAGE} \
 		/bin/bash -cex \
-			"cd python-package/ && python setup.py install --precompile && cd ../ && pip install pytest && pytest -vv -rA tests/python_package_test/test_dask.py"
+			"sh ./build-python.sh install --precompile && pip install pytest && pytest -vv -rA tests/python_package_test/test_dask.py"
 
 .PHONY: lint
 lint: lint-dockerfiles

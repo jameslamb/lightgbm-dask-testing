@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 ENV \
     DEBIAN_FRONTEND=noninteractive \
@@ -12,7 +12,7 @@ RUN apt-get update && \
         build-essential \
         cmake \
         libomp-dev && \
-    pip install --no-cache-dir \
+    pip install --prefer-binary --no-cache-dir \
         blosc \
         bokeh \
         dask==${DASK_VERSION} \
@@ -20,11 +20,11 @@ RUN apt-get update && \
         distributed==${DASK_VERSION} \
         lz4 \
         numpy \
-        pandas \
+        'pandas>=2.0.0' \
         scikit-learn && \
     # remove unnecessary file
     find \
-        /usr/local/lib/python3.9/site-packages \
+        /usr/local/lib/python3.11/site-packages \
         -type f \
         \( \
         -name '*.c' \
@@ -47,7 +47,7 @@ RUN apt-get update && \
         \) \
         -exec rm '{}' '+' && \
     find \
-        /usr/local/lib/python3.9/site-packages \
+        /usr/local/lib/python3.11/site-packages \
         -type d \
         -wholename '*__pycache__*' \
         -exec rm -rf '{}' '+' && \

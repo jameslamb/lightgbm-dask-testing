@@ -15,7 +15,7 @@ This repository can be used to test and develop changes to LightGBM's Dask integ
 - [Getting Started](#getting-started)
 - [Develop in Jupyter](#develop-in-jupyter)
 - [Test with a LocalCluster](#test-with-a-localcluster)
-- [Test with a FargetCluster](#test-with-a-fargetcluster)
+- [Test with a FargateCluster](#test-with-a-fargatecluster)
 - [Run LightGBM unit tests](#run-lightgbm-unit-tests)
 - [Profile LightGBM code](#profiling)
     - [runtime profiling](#runtime-profiling)

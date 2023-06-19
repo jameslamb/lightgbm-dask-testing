@@ -14,15 +14,15 @@ RUN apt-get update && \
         cmake \
         libomp-dev \
         ninja-build && \
-    pip install --prefer-binary --no-cache-dir \
+    pip install --no-cache-dir \
+        'aiobotocore[awscli,boto3]>=2.5.0' \
         blosc \
         bokeh \
-        boto3 \
         dask==${DASK_VERSION} \
-        dask-cloudprovider \
-        dask-ml \
+        'dask-cloudprovider[aws]>=2022.10.0' \
+        'dask-ml>=2023.3.24' \
         distributed==${DASK_VERSION} \
-        jupyterlab \
+        'jupyterlab>=4.0.2' \
         lz4 \
         numpy \
         'pandas>=2.0.0' \

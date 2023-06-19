@@ -12,11 +12,11 @@ RUN apt-get update && \
         build-essential \
         cmake \
         libomp-dev && \
-    pip install --prefer-binary --no-cache-dir \
+    pip install --no-cache-dir \
         blosc \
         bokeh \
         dask==${DASK_VERSION} \
-        dask-ml \
+        'dask-ml>=2023.3.24' \
         distributed==${DASK_VERSION} \
         lz4 \
         numpy \

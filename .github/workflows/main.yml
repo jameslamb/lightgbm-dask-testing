@@ -14,17 +14,17 @@ jobs:
           - task: linting
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Set up Python
-        uses: conda-incubator/setup-miniconda@v2
+        uses: conda-incubator/setup-miniconda@v3
         with:
           python-version: 3.11
       - name: linting
         if: matrix.task == 'linting'
         shell: bash
         run: |
-          pip install --upgrade black flake8 isort nbqa
-          make lint
+          pip install --upgrade pre-commit
+          pre-commit run --all-files
   all-tests-successful:
     if: always()
     runs-on: ubuntu-latest

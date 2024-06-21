@@ -68,13 +68,6 @@ ecr-details.json:
 			--repository-name ${CLUSTER_IMAGE_NAME} \
 	> ./ecr-details.json
 
-.PHONY: format
-format:
-	black .
-	isort .
-	nbqa isort .
-	nbqa black .
-
 $(LIGHTGBM_REPO):
 	git clone --recursive https://github.com/microsoft/LightGBM.git
 
@@ -99,15 +92,6 @@ lightgbm-unit-tests:
 		-it ${CLUSTER_IMAGE} \
 		/bin/bash -cex \
 			"sh ./build-python.sh install --precompile && pip install pytest && pytest -vv -rA tests/python_package_test/test_dask.py"
-
-.PHONY: lint
-lint: lint-dockerfiles
-	isort --check .
-	black --check --diff .
-	flake8 --count .
-	nbqa black --check --diff .
-	nbqa flake8 .
-	nbqa isort --check .
 
 .PHONY: lint-dockerfiles
 lint-dockerfiles:

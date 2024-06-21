@@ -1,12 +1,33 @@
-[tool.black]
-line-length = 100
-exclude = '''
-/(
-  | LightGBM
-)/
-'''
+[tool.ruff.lint]
+select = [
+    # flake8-bugbear
+    "B",
+    # flake8-comprehensions
+    "C4",
+    # pycodestyle
+    "E",
+    # pyflakes
+    "F",
+    # NumPy-specific rules
+    "NPY",
+    # pylint
+    "PL",
+    # flake8-return: unnecessary assignment before return
+    "RET504",
+    # flake8-simplify: use dict.get() instead of an if-else block
+    "SIM401",
+]
 
-[tool.nbqa.exclude]
-black = "LightGBM/"
-flake8 = "LightGBM/"
-isort = "LightGBM/"
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = [
+  # (pylint) Unnecessary list() call
+  "C408",
+  # (pylint) too many arguments in function definition
+  "PLR0913",
+  # (pylint) Magic value used in comparison
+  "PLR2004",
+]
+"jupyter_notebook_config.py" = [
+    # (flake8) undefined name
+    "F821",
+]

@@ -1,7 +1,7 @@
 # NOTE: using us-east-1 because it is the only region that supports
 #       ECR BatchDeleteImage()
 AWS_REGION=us-east-1
-DASK_VERSION=2023.5.0
+DASK_VERSION=2024.6.2
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
 CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
@@ -80,7 +80,7 @@ $(LIB_LIGHTGBM): $(LIGHTGBM_REPO)
 		--entrypoint="" \
 		-it ${NOTEBOOK_BASE_IMAGE} \
 		/bin/bash -cex \
-			"rm -rf ./build && mkdir build && cd build && cmake -G Ninja .. && ninja -j2 _lightgbm"
+			"rm -rf ./build && cmake -B build -S . && cmake --build build --target _lightgbm -j2"
 
 .PHONY: lightgbm-unit-tests
 lightgbm-unit-tests:

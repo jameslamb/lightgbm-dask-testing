@@ -23,7 +23,7 @@ jobs:
   build:
     name: build
     needs: [lint]
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

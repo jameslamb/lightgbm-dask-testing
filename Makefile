@@ -78,7 +78,7 @@ $(LIB_LIGHTGBM): $(LIGHTGBM_REPO)
 		-v $$(pwd)/LightGBM:/opt/LightGBM \
 		--workdir=/opt/LightGBM \
 		--entrypoint="" \
-		-it ${NOTEBOOK_BASE_IMAGE} \
+		-i ${NOTEBOOK_BASE_IMAGE} \
 		/bin/bash -cex \
 			"rm -rf ./build && cmake -B build -S . && cmake --build build --target _lightgbm -j2"
 
@@ -89,7 +89,7 @@ lightgbm-unit-tests:
 		-v $$(pwd)/LightGBM:/opt/LightGBM \
 		--workdir=/opt/LightGBM \
 		--entrypoint="" \
-		-it ${CLUSTER_IMAGE} \
+		-i ${CLUSTER_IMAGE} \
 		/bin/bash -cex \
 			"sh ./build-python.sh install --precompile && pip install pytest && pytest -vv -rA tests/python_package_test/test_dask.py"
 
@@ -137,7 +137,7 @@ profile: profiling-image
 		-v $$(pwd)/LightGBM:/opt/LightGBM \
 		--workdir=/opt/LightGBM \
 		--entrypoint="" \
-		-it ${PROFILING_IMAGE} \
+		-i ${PROFILING_IMAGE} \
 		/bin/bash -cex \
 			'/bin/bash /usr/local/bin/profile-examples.sh && python -m snakeviz /profiling-output/ --hostname 0.0.0.0 --server'
 
@@ -165,7 +165,7 @@ profile-memory-usage: profiling-image
 		-v $$(pwd)/LightGBM:/opt/LightGBM \
 		--workdir=/opt/LightGBM \
 		--entrypoint="" \
-		-it ${PROFILING_IMAGE} \
+		-i ${PROFILING_IMAGE} \
 		/bin/bash -cex \
 			'/bin/bash /usr/local/bin/profile-example-memory-usage.sh'
 

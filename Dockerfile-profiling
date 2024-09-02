@@ -1,9 +1,9 @@
-ARG BASE_IMAGE
+ARG BASE_IMAGE=unset
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
-RUN pip install --no-cache-dir \
+RUN pip install --no-cache-dir --prefer-binary \
         memray \
         pytest \
         pytest-memray \

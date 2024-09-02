@@ -5,14 +5,20 @@ ENV \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 
+ARG CMAKE_VERSION="3.30.2"
 ARG DASK_VERSION
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
-        cmake \
+        curl \
         libomp-dev && \
-    pip install --no-cache-dir \
+    curl -O -L \
+        https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch).sh && \
+    mkdir /opt/cmake && \
+    sh cmake-${CMAKE_VERSION}-linux-$(arch).sh --skip-license --prefix=/opt/cmake && \
+    ln -sf /opt/cmake/bin/cmake /usr/local/bin/cmake && \
+    pip install --no-cache-dir --prefer-binary \
         blosc \
         bokeh \
         dask==${DASK_VERSION} \

@@ -2,7 +2,8 @@
 
 [![GitHub Actions status](https://github.com/jameslamb/lightgbm-dask-testing/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/jameslamb/lightgbm-dask-testing/actions)
 
-This repository can be used to test and develop changes to LightGBM's Dask integration. It contains the following useful features:
+This repository can be used to test and develop changes to LightGBM's Dask integration.
+It contains the following useful features:
 
 * `make` recipes for building a local development image with `lightgbm` installed from a local copy, and Jupyter Lab running for interactive development
 * Jupyter notebooks for testing `lightgbm.dask` against a `LocalCluster` (multi-worker, single-machine) and a `dask_cloudprovider.aws.FargateCluster` (multi-worker, multi-machine)
@@ -22,7 +23,8 @@ This repository can be used to test and develop changes to LightGBM's Dask integ
 
 ## Getting Started
 
-To begin, clone a copy of LightGBM to a folder `LightGBM` at the root of this repo. You can do this however you want, for example:
+To begin, clone a copy of LightGBM to a folder `LightGBM` at the root of this repo.
+You can do this however you want, for example:
 
 ```shell
 git clone --recursive git@github.com:microsoft/LightGBM.git LightGBM
@@ -35,7 +37,6 @@ If you're developing a reproducible example for [an issue](https://github.com/mi
 ## Develop in Jupyter
 
 This section describes how to test a version of LightGBM in Jupyter.
-
 
 #### 1. Build the notebook image
 
@@ -80,13 +81,15 @@ To test `lightgbm.dask` on a `LocalCluster`, run the steps in ["Develop in Jupyt
 
 ## Test with a `FargateCluster`
 
-There are some problems with Dask code which only arise in a truly distributed, multi-machine setup. To test for these sorts of issues, I like to use [`dask-cloudprovider`](https://github.com/dask/dask-cloudprovider).
+There are some problems with Dask code which only arise in a truly distributed, multi-machine setup.
+To test for these sorts of issues, I like to use [`dask-cloudprovider`](https://github.com/dask/dask-cloudprovider).
 
 The steps below describe how to test a local copy of LightGBM on a `FargateCluster` from `dask-cloudprovider`.
 
 #### 1. Build the cluster image
 
-Build an image that can be used for the scheduler and works in the Dask cluster you'll create on AWS Fargate. This image will have your local copy of LightGBM installed in it.
+Build an image that can be used for the scheduler and works in the Dask cluster you'll create on AWS Fargate.
+This image will have your local copy of LightGBM installed in it.
 
 ```shell
 make cluster-image
@@ -94,13 +97,15 @@ make cluster-image
 
 #### 2. Install and configure the AWS CLI
 
-For the rest of the steps in this section, you'll need access to AWS resources. To begin, install the AWS CLI if you don't already have it.
+For the rest of the steps in this section, you'll need access to AWS resources.
+To begin, install the AWS CLI if you don't already have it.
 
 ```shell
 pip install --upgrade awscli
 ```
 
-Next, configure your shell to make authenticated requests to AWS. If you've never done this, you can see [the AWS CLI docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+Next, configure your shell to make authenticated requests to AWS.
+If you've never done this, you can see [the AWS CLI docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 
 The rest of this section assums that the shell variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` have been sett.
 
@@ -122,9 +127,12 @@ set +o allexport
 
 #### 3. Push the cluster image to ECR
 
-To use the cluster image in the containers you spin up on Fargate, it has to be available in a container registry. This project uses the free AWS Elastic Container Registry (ECR) Public. For more information on ECR Public, see [the AWS docs](https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html).
+To use the cluster image in the containers you spin up on Fargate, it has to be available in a container registry.
+This project uses the free AWS Elastic Container Registry (ECR) Public.
+For more information on ECR Public, see [the AWS docs](https://docs.amazonaws.cn/en_us/AmazonECR/latest/public/docker-push-ecr-image.html).
 
-The command below will create a new repository on ECR Public, store the details of that repository in a file `ecr-details.json`, and push the cluster image to it. The cluster image will not contain your credentials, notebooks, or other local files.
+The command below will create a new repository on ECR Public, store the details of that repository in a file `ecr-details.json`, and push the cluster image to it.
+The cluster image will not contain your credentials, notebooks, or other local files.
 
 ```shell
 make push-image
@@ -134,7 +142,9 @@ This may take a few minutes to complete.
 
 #### 4. Run the AWS notebook
 
-Follow the steps in ["Develop in Jupyter"](#develop-in-jupyter) to get a local Jupyter Lab running. Open [`aws.ipynb`](./notebooks/fargate-cluster.ipynb). That notebook contains sample code that uses `dask-cloudprovider` to provision a Dask cluster on AWS Fargate.
+Follow the steps in ["Develop in Jupyter"](#develop-in-jupyter) to get a local Jupyter Lab running.
+Open [`aws.ipynb`](./notebooks/fargate-cluster.ipynb).
+That notebook contains sample code that uses `dask-cloudprovider` to provision a Dask cluster on AWS Fargate.
 
 You can view the cluster's current state and its logs by navigating to the Elastic Container Service (ECS) section of the AWS console.
 

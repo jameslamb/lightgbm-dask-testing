@@ -12,7 +12,7 @@ RUN apt-get update && \
         build-essential \
         cmake \
         libomp-dev && \
-    pip install --no-cache-dir \
+    pip install --no-cache-dir --prefer-binary \
         blosc \
         bokeh \
         dask==${DASK_VERSION} \

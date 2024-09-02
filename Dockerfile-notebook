@@ -1,4 +1,4 @@
-ARG BASE_IMAGE
+ARG BASE_IMAGE=unset
 ARG INSTALL_DIR=/root/testing/LightGBM
 
 # hadolint ignore=DL3006

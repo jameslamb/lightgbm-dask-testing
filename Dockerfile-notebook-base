@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-ARG DASK_VERSION
+ARG DASK_VERSION=unset
 
 ENV \
     DASK_VERSION=${DASK_VERSION} \
@@ -14,7 +14,7 @@ RUN apt-get update && \
         cmake \
         libomp-dev \
         ninja-build && \
-    pip install --no-cache-dir \
+    pip install --no-cache-dir --prefer-binary \
         'aiobotocore[awscli,boto3]>=2.5.0' \
         blosc \
         bokeh \

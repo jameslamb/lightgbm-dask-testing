@@ -11,6 +11,7 @@ ARG DASK_VERSION
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
+        curl \
         libomp-dev && \
     curl -O -L \
         https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch).sh && \

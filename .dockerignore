@@ -1,6 +1,7 @@
 *
 !bin/profile-examples.sh
 !bin/profile-example-memory-usage.sh
+!bin/test
 !jupyter_notebook_config.py
 !LightGBM/build-python.sh
 !LightGBM/cmake

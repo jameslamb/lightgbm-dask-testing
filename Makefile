@@ -2,16 +2,18 @@
 #       ECR BatchDeleteImage()
 AWS_REGION=us-east-1
 DASK_VERSION=2024.6.2
+PYTHON_VERSION=3.12
+IMAGE_TAG=py${PYTHON_VERSION}-dask${DASK_VERSION}
 USER_SLUG=$$(echo $${USER} | tr '[:upper:]' '[:lower:]' | tr -cd '[a-zA-Z0-9]-')
-CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${DASK_VERSION}
+CLUSTER_BASE_IMAGE=lightgbm-dask-testing-cluster-base:${IMAGE_TAG}
 CLUSTER_IMAGE_NAME=lightgbm-dask-testing-cluster-${USER_SLUG}
-CLUSTER_IMAGE=${CLUSTER_IMAGE_NAME}:${DASK_VERSION}
+CLUSTER_IMAGE=${CLUSTER_IMAGE_NAME}:${IMAGE_TAG}
 FORCE_REBUILD=0
 FORCE_REBUILD_PROFILING_IMAGE=0
-NOTEBOOK_BASE_IMAGE=lightgbm-dask-testing-notebook-base:${DASK_VERSION}
-NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${DASK_VERSION}
+NOTEBOOK_BASE_IMAGE=lightgbm-dask-testing-notebook-base:${IMAGE_TAG}
+NOTEBOOK_IMAGE=lightgbm-dask-testing-notebook:${IMAGE_TAG}
 NOTEBOOK_CONTAINER_NAME=dask-lgb-notebook
-PROFILING_IMAGE=lightgbm-dask-testing-profiling:${DASK_VERSION}
+PROFILING_IMAGE=lightgbm-dask-testing-profiling:${IMAGE_TAG}
 
 LIB_LIGHTGBM=${PWD}/LightGBM/lib_lightgbm.so
 LIGHTGBM_REPO=${PWD}/LightGBM/README.md
@@ -36,15 +38,16 @@ cluster-base-image:
 	fi; \
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
+		--build-arg PYTHON_VERSION=${PYTHON_VERSION} \
 		-t ${CLUSTER_BASE_IMAGE} \
-		- < Dockerfile-cluster-base
+		-f Dockerfile-cluster-base \
+		.
 
 .PHONY: cluster-image
 cluster-image: cluster-base-image $(LIB_LIGHTGBM)
 	docker build \
-		--build-arg DASK_VERSION=${DASK_VERSION} \
-		-t ${CLUSTER_IMAGE} \
 		--build-arg BASE_IMAGE=${CLUSTER_BASE_IMAGE} \
+		-t ${CLUSTER_IMAGE} \
 		-f Dockerfile-cluster \
 		.
 
@@ -115,8 +118,10 @@ notebook-base-image:
 	fi; \
 	docker build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
+		--build-arg PYTHON_VERSION=${PYTHON_VERSION} \
 		-t ${NOTEBOOK_BASE_IMAGE} \
-		- < Dockerfile-notebook-base
+		-f ./Dockerfile-notebook-base \
+		.
 
 .PHONY: notebook-image
 notebook-image: notebook-base-image $(LIB_LIGHTGBM)

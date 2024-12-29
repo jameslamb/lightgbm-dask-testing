@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e -u -o pipefail
+
+CMAKE_VERSION=${1}
+
+curl -O -L \
+    https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch).sh
+
+mkdir /opt/cmake
+sh cmake-${CMAKE_VERSION}-linux-$(arch).sh --skip-license --prefix=/opt/cmake
+ln -sf /opt/cmake/bin/cmake /usr/local/bin/cmake

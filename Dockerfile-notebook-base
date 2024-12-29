@@ -1,68 +1,77 @@
-FROM python:3.11-slim
+ARG PYTHON_VERSION=unset
 
+FROM python:${PYTHON_VERSION}-slim
+
+ARG CMAKE_VERSION="3.31.3"
 ARG DASK_VERSION=unset
+ARG PYTHON_VERSION=unset
 
 ENV \
-    DASK_VERSION=${DASK_VERSION} \
     DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 
-ARG CMAKE_VERSION="3.30.2"
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        curl \
-        libomp-dev \
-        ninja-build && \
-    curl -O -L \
-        https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch).sh && \
-    mkdir /opt/cmake && \
-    sh cmake-${CMAKE_VERSION}-linux-$(arch).sh --skip-license --prefix=/opt/cmake && \
-    ln -sf /opt/cmake/bin/cmake /usr/local/bin/cmake && \
-    pip install --no-cache-dir --prefer-binary \
+RUN --mount=type=bind,source=bin,target=/build-bin \
+<<EOF
+apt-get update
+apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    libomp-dev \
+    ninja-build
+
+/build-bin/install-cmake "${CMAKE_VERSION}"
+
+python -m pip install \
+    --no-cache-dir \
+    --prefer-binary \
         'aiobotocore[awscli,boto3]>=2.5.0' \
         blosc \
         bokeh \
-        dask==${DASK_VERSION} \
+        "dask==${DASK_VERSION}" \
         'dask-cloudprovider[aws]>=2022.10.0' \
         'dask-ml>=2023.3.24' \
-        distributed==${DASK_VERSION} \
+        "distributed==${DASK_VERSION}" \
         'jupyterlab>=4.0.2' \
         lz4 \
         numpy \
         'pandas>=2.0.0' \
-        scikit-learn && \
-    # remove unnecessary file
-    find \
-        /usr/local/lib/python3.11/site-packages \
-        -type f \
-        \( \
-        -name '*.c' \
-        -o -name '*.cc' \
-        -o -name '*.cpp' \
-        -o -name '*.h' \
-        -o -name '*.hpp' \
-        -o -wholename '*bokeh/sampledata/*' \
-        -o -wholename '*dask/*tests/*' \
-        -o -wholename '*joblib/test/*' \
-        -o -wholename '*llvmlite/tests/*' \
-        -o -wholename '*numba/*tests/*' \
-        -o -wholename '*numpy/*tests/*' \
-        -o -wholename '*pandas/*tests/*' \
-        -o -wholename '*scikit-learn/tests*' \
-        -o -wholename '*scikit-learn/*/tests*' \
-        -o -wholename '*scipy/*/tests*' \
-        -o -wholename '*tornado/test/*' \
-        -o -wholename '*/__pycache__/*' \
-        \) \
-        -exec rm '{}' '+' && \
-    find \
-        /usr/local/lib/python3.11/site-packages \
-        -type d \
-        -wholename '*__pycache__*' \
-        -exec rm -rf '{}' '+' && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+        scikit-learn
+
+# remove unnecessary files
+find \
+    /usr/local/lib/python${PYTHON_VERSION}/site-packages \
+    -type f \
+    \( \
+    -name '*.c' \
+    -o -name '*.cc' \
+    -o -name '*.cpp' \
+    -o -name '*.h' \
+    -o -name '*.hpp' \
+    -o -wholename '*bokeh/sampledata/*' \
+    -o -wholename '*dask/*tests/*' \
+    -o -wholename '*joblib/test/*' \
+    -o -wholename '*llvmlite/tests/*' \
+    -o -wholename '*numba/*tests/*' \
+    -o -wholename '*numpy/*tests/*' \
+    -o -wholename '*pandas/*tests/*' \
+    -o -wholename '*scikit-learn/tests*' \
+    -o -wholename '*scikit-learn/*/tests*' \
+    -o -wholename '*scipy/*/tests*' \
+    -o -wholename '*tornado/test/*' \
+    -o -wholename '*/__pycache__/*' \
+    \) \
+    -exec rm '{}' '+'
+
+find \
+    /usr/local/lib/python${PYTHON_VERSION}/site-packages \
+    -type d \
+    -wholename '*__pycache__*' \
+    -exec rm -rf '{}' '+'
+
+# clean apt-get files
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+EOF
 
 ENTRYPOINT ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--port=8888"]

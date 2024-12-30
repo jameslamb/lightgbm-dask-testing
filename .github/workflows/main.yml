@@ -25,12 +25,12 @@ jobs:
           driver: docker
           install: true
           use: true
-      - name: Build cluster image
-        run: |
-          make cluster-image
       - name: Build notebook image
         run: |
           make notebook-image
+      - name: Build cluster image
+        run: |
+          make cluster-image
   all-tests-successful:
     if: always()
     runs-on: ubuntu-latest

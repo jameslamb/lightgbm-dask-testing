@@ -41,7 +41,7 @@ cluster-base-image:
 		--build-arg PYTHON_VERSION=${PYTHON_VERSION} \
 		--load \
 		-t ${CLUSTER_BASE_IMAGE} \
-		-f Dockerfile-cluster-base \
+		-f ./Dockerfile-cluster-base \
 		.
 
 .PHONY: cluster-image
@@ -50,7 +50,7 @@ cluster-image: cluster-base-image $(LIB_LIGHTGBM)
 		--build-arg BASE_IMAGE=${CLUSTER_BASE_IMAGE} \
 		--load \
 		-t ${CLUSTER_IMAGE} \
-		-f Dockerfile-cluster \
+		-f ./Dockerfile-cluster \
 		.
 
 .PHONY: create-repo
@@ -132,7 +132,7 @@ notebook-image: notebook-base-image $(LIB_LIGHTGBM)
 		--build-arg BASE_IMAGE=${NOTEBOOK_BASE_IMAGE} \
 		--load \
 		-t ${NOTEBOOK_IMAGE} \
-		-f Dockerfile-notebook \
+		-f ./Dockerfile-notebook \
 		.
 
 .PHONY: profile
@@ -162,7 +162,7 @@ profiling-image: cluster-image
 		--build-arg BASE_IMAGE=${CLUSTER_IMAGE} \
 		--load \
 		-t ${PROFILING_IMAGE} \
-		-f Dockerfile-profiling \
+		-f ./Dockerfile-profiling \
 		.
 
 .PHONY: profile-memory-usage

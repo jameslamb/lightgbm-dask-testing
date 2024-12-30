@@ -1,4 +1,5 @@
 *
+!bin/install-cmake
 !bin/profile-examples.sh
 !bin/profile-example-memory-usage.sh
 !jupyter_notebook_config.py

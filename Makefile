@@ -40,6 +40,7 @@ cluster-base-image:
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		--build-arg PYTHON_VERSION=${PYTHON_VERSION} \
 		--load \
+		--output type=docker \
 		-t ${CLUSTER_BASE_IMAGE} \
 		-f ./Dockerfile-cluster-base \
 		.
@@ -49,6 +50,7 @@ cluster-image: cluster-base-image $(LIB_LIGHTGBM)
 	docker buildx build \
 		--build-arg BASE_IMAGE=${CLUSTER_BASE_IMAGE} \
 		--load \
+		--output type=docker \
 		-t ${CLUSTER_IMAGE} \
 		-f ./Dockerfile-cluster \
 		.
@@ -61,7 +63,7 @@ delete-repo:
 	aws --region ${AWS_REGION} \
 		ecr-public batch-delete-image \
 			--repository-name ${CLUSTER_IMAGE_NAME} \
-			--image-ids imageTag=${DASK_VERSION}
+			--image-ids imageTag=${IMAGE_TAG}
 	aws --region ${AWS_REGION} \
 		ecr-public delete-repository \
 			--repository-name ${CLUSTER_IMAGE_NAME}
@@ -122,6 +124,7 @@ notebook-base-image:
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		--build-arg PYTHON_VERSION=${PYTHON_VERSION} \
 		--load \
+		--output type=docker \
 		-t ${NOTEBOOK_BASE_IMAGE} \
 		-f ./Dockerfile-notebook-base \
 		.
@@ -131,6 +134,7 @@ notebook-image: notebook-base-image $(LIB_LIGHTGBM)
 	docker buildx build \
 		--build-arg BASE_IMAGE=${NOTEBOOK_BASE_IMAGE} \
 		--load \
+		--output type=docker \
 		-t ${NOTEBOOK_IMAGE} \
 		-f ./Dockerfile-notebook \
 		.
@@ -161,6 +165,7 @@ profiling-image: cluster-image
 	docker buildx build \
 		--build-arg BASE_IMAGE=${CLUSTER_IMAGE} \
 		--load \
+		--output type=docker \
 		-t ${PROFILING_IMAGE} \
 		-f ./Dockerfile-profiling \
 		.
@@ -188,10 +193,10 @@ push-image: create-repo
 		--username AWS \
 		--password-stdin public.ecr.aws
 	docker tag \
-		${CLUSTER_IMAGE_NAME}:${DASK_VERSION} \
-		$$(cat ./ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):${DASK_VERSION}
+		${CLUSTER_IMAGE_NAME}:${IMAGE_TAG} \
+		$$(cat ./ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):${IMAGE_TAG}
 	docker push \
-		$$(cat ./ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):${DASK_VERSION}
+		$$(cat ./ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):${IMAGE_TAG}
 
 .PHONY: start-notebook
 start-notebook:

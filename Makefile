@@ -44,6 +44,8 @@ cluster-base-image:
 		-t ${CLUSTER_BASE_IMAGE} \
 		-f ./Dockerfile-cluster-base \
 		.
+	echo "--- docker images ---"
+	docker images
 
 .PHONY: cluster-image
 cluster-image: cluster-base-image $(LIB_LIGHTGBM)

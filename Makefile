@@ -36,7 +36,7 @@ cluster-base-image:
 			exit 0; \
 		fi; \
 	fi; \
-	docker build \
+	docker buildx build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		--build-arg PYTHON_VERSION=${PYTHON_VERSION} \
 		-t ${CLUSTER_BASE_IMAGE} \
@@ -45,7 +45,7 @@ cluster-base-image:
 
 .PHONY: cluster-image
 cluster-image: cluster-base-image $(LIB_LIGHTGBM)
-	docker build \
+	docker buildx build \
 		--build-arg BASE_IMAGE=${CLUSTER_BASE_IMAGE} \
 		-t ${CLUSTER_IMAGE} \
 		-f Dockerfile-cluster \
@@ -116,7 +116,7 @@ notebook-base-image:
 			exit 0; \
 		fi; \
 	fi; \
-	docker build \
+	docker buildx build \
 		--build-arg DASK_VERSION=${DASK_VERSION} \
 		--build-arg PYTHON_VERSION=${PYTHON_VERSION} \
 		-t ${NOTEBOOK_BASE_IMAGE} \
@@ -125,7 +125,7 @@ notebook-base-image:
 
 .PHONY: notebook-image
 notebook-image: notebook-base-image $(LIB_LIGHTGBM)
-	docker build \
+	docker buildx build \
 		-t ${NOTEBOOK_IMAGE} \
 		-f Dockerfile-notebook \
 		--build-arg BASE_IMAGE=${NOTEBOOK_BASE_IMAGE} \
@@ -154,7 +154,7 @@ profiling-image: cluster-image
 			exit 0; \
 		fi; \
 	fi && \
-	docker build \
+	docker buildx build \
 		-t ${PROFILING_IMAGE} \
 		--build-arg BASE_IMAGE=${CLUSTER_IMAGE} \
 		-f Dockerfile-profiling \

@@ -20,6 +20,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
+          # 'driver: docker' allows one build to re-use images from a prior build
+          # ref: https://github.com/docker/setup-buildx-action/issues/251
+          driver: docker
           install: true
           use: true
       - name: Build cluster image

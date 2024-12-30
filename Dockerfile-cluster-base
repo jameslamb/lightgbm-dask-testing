@@ -19,7 +19,7 @@ apt-get install -y --no-install-recommends \
     curl \
     libomp-dev
 
-/build-bin/install-cmake "${CMAKE_VERSION}"
+bash /build-bin/install-cmake "${CMAKE_VERSION}"
 
 python -m pip install \
     --no-cache-dir \

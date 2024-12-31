@@ -200,6 +200,8 @@ push-image: create-repo
 	docker push \
 		$$(cat ./ecr-details.json | jq .'repository'.'repositoryUri' | tr -d '"'):${IMAGE_TAG}
 
+# NOTE: IMAGE_TAG is in the environment here so the AWS notebooks
+#       know what image to use for the Dask cluster
 .PHONY: start-notebook
 start-notebook:
 	docker run \
@@ -208,6 +210,7 @@ start-notebook:
 		--env AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID:-notset} \
 		--env AWS_DEFAULT_REGION=${AWS_REGION} \
 		--env AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY:-notset} \
+		--env IMAGE_TAG=${IMAGE_TAG} \
 		-p 8888:8888 \
 		-p 8787:8787 \
 		--name ${NOTEBOOK_CONTAINER_NAME} \

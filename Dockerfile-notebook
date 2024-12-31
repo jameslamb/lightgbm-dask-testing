@@ -5,7 +5,7 @@ FROM ${BASE_IMAGE}
 
 COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
 
-RUN --mount=type=bind,source=LightGBM,target=/tmp/LightGBM \
+RUN --mount=type=bind,source=LightGBM,target=/tmp/LightGBM,rw \
 <<EOF
 cd /tmp/LightGBM
 

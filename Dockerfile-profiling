@@ -3,12 +3,14 @@ ARG BASE_IMAGE=unset
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
-RUN pip install --no-cache-dir --prefer-binary \
-        memray \
-        pytest \
-        pytest-memray \
-        pytest-profiling \
-        snakeviz
+RUN <<<EOF
+pip install --no-cache-dir --prefer-binary \
+    memray \
+    pytest \
+    pytest-memray \
+    pytest-profiling \
+    snakeviz
+EOF
 
 COPY bin/profile-examples.sh /usr/local/bin/profile-examples.sh
 COPY bin/profile-example-memory-usage.sh /usr/local/bin/profile-example-memory-usage.sh

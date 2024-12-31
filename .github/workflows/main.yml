@@ -31,6 +31,9 @@ jobs:
       - name: Build cluster image
         run: |
           make cluster-image
+      - name: Build profiling image
+        run: |
+          make profiling-image
   all-tests-successful:
     if: always()
     runs-on: ubuntu-latest

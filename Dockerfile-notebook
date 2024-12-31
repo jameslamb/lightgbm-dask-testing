@@ -1,15 +1,19 @@
 ARG BASE_IMAGE=unset
-ARG INSTALL_DIR=/root/testing/LightGBM
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
 COPY jupyter_notebook_config.py /root/.jupyter/jupyter_notebook_config.py
-COPY LightGBM/ ${INSTALL_DIR}/
 
-RUN cd "${INSTALL_DIR}" && \
-    sh ./build-python.sh install --precompile && \
-    cd /root/ && \
-    rm -rf "${INSTALL_DIR}"
+RUN --mount=type=bind,source=LightGBM,target=/tmp/LightGBM \
+<<EOF
+cd /tmp/LightGBM
+
+# build lightgbm package, install to site-packages/
+sh ./build-python.sh install --precompile
+
+# clear pip's cache
+rm -rf ~/.cache
+EOF
 
 WORKDIR /root/testing/notebooks

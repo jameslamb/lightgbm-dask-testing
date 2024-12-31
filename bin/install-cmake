@@ -4,12 +4,17 @@ set -e -u -o pipefail
 
 CMAKE_VERSION=${1}
 
+declare -r install_script
+install_script="cmake-${CMAKE_VERSION}-linux-$(arch).sh"
+
 curl -O -L \
-    "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(arch).sh"
+    "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/${install_script}"
 
 mkdir /opt/cmake
-sh "cmake-${CMAKE_VERSION}-linux-$(arch).sh" \
+sh "${install_script}" \
     --skip-license \
     --prefix=/opt/cmake
+
+rm "./${install_script}"
 
 ln -sf /opt/cmake/bin/cmake /usr/local/bin/cmake

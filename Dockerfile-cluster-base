@@ -39,23 +39,31 @@ find \
     /usr/local/lib/python${PYTHON_VERSION}/site-packages \
     -type f \
     \( \
-    -name '*.c' \
-    -o -name '*.cc' \
-    -o -name '*.cpp' \
-    -o -name '*.h' \
-    -o -name '*.hpp' \
-    -o -wholename '*bokeh/sampledata/*' \
-    -o -wholename '*dask/*tests/*' \
-    -o -wholename '*joblib/test/*' \
-    -o -wholename '*llvmlite/tests/*' \
-    -o -wholename '*numba/*tests/*' \
-    -o -wholename '*numpy/*tests/*' \
-    -o -wholename '*pandas/*tests/*' \
-    -o -wholename '*scikit-learn/tests*' \
-    -o -wholename '*scikit-learn/*/tests*' \
-    -o -wholename '*scipy/*/tests*' \
-    -o -wholename '*tornado/test/*' \
-    -o -wholename '*/__pycache__/*' \
+    -name '*.c'                                 \
+    -o -name '*.cc'                             \
+    -o -name '*.cpp'                            \
+    -o -name '*.h'                              \
+    -o -name '*.hpp'                            \
+    -o -wholename '*bokeh/sampledata/*'         \
+    -o -wholename '*dask/*tests/*'              \
+    -o -wholename '*joblib/test/*'              \
+    -o -wholename '*llvmlite/tests/*'           \
+    -o -wholename '*numba/*tests/*'             \
+    -o -wholename '*numpy/*tests/*'             \
+    -o -wholename '*pandas/tests*'              \
+    -o -wholename '*pandas/*/tests/*'           \
+    -o -wholename '*psutil/tests/*'             \
+    -o -wholename 'pyarrow/_pyarrow_cpp_tests*' \
+    -o -wholename '*scikit-learn/tests*'        \
+    -o -wholename '*scikit-learn/*/tests*'      \
+    -o -wholename '*sklearn/tests*'             \
+    -o -wholename '*sklearn/*/tests*'           \
+    -o -wholename '*scipy/*/tests*'             \
+    -o -wholename '*sparse/*/tests/*'           \
+    -o -wholename '*toolz/tests/*'              \
+    -o -wholename '*tornado/test/*'             \
+    -o -wholename '*zict/tests/*'               \
+    -o -wholename '*/__pycache__/*'             \
     \) \
     -exec rm '{}' '+'
 
@@ -67,5 +75,9 @@ find \
 
 # clean apt-get files
 apt-get clean
+apt-get purge -y --auto-remove
 rm -rf /var/lib/apt/lists/*
+
+# clean other files
+rm -rf ~/.cache
 EOF

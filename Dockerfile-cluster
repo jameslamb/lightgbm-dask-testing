@@ -1,12 +1,15 @@
 ARG BASE_IMAGE=unset
-ARG INSTALL_DIR=/opt/LightGBM
 
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
-COPY LightGBM/ ${INSTALL_DIR}/
+RUN --mount=type=bind,source=LightGBM,target=/tmp/LightGBM \
+<<EOF
+cd /tmp/LightGBM
 
-RUN cd "${INSTALL_DIR}" && \
-    sh ./build-python.sh install --precompile && \
-    cd /opt && \
-    rm -rf "${INSTALL_DIR}"
+# build lightgbm package, install to site-packages/
+sh ./build-python.sh install --precompile
+
+# clear pip's cache
+rm -rf ~/.cache
+EOF

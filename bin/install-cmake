@@ -4,7 +4,6 @@ set -e -u -o pipefail
 
 CMAKE_VERSION=${1}
 
-declare -r install_script
 install_script="cmake-${CMAKE_VERSION}-linux-$(arch).sh"
 
 curl -O -L \

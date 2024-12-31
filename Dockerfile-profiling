@@ -3,7 +3,7 @@ ARG BASE_IMAGE=unset
 # hadolint ignore=DL3006
 FROM ${BASE_IMAGE}
 
-RUN <<<EOF
+RUN <<EOF
 pip install --no-cache-dir --prefer-binary \
     memray \
     pytest \

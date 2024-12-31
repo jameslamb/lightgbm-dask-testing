@@ -27,7 +27,10 @@ To begin, clone a copy of LightGBM to a folder `LightGBM` at the root of this re
 You can do this however you want, for example:
 
 ```shell
-git clone --recursive git@github.com:microsoft/LightGBM.git LightGBM
+git clone \
+    --recursive \
+    git@github.com:microsoft/LightGBM.git \
+    ./LightGBM
 ```
 
 If you're developing a reproducible example for [an issue](https://github.com/microsoft/LightGBM/issues) or you're testing a potential [pull request](https://github.com/microsoft/LightGBM/pulls), you probably want to clone LightGBM from your fork, instead of the main repo.
@@ -174,7 +177,7 @@ Pass variable `DASK_VERSION` to use a different version of `dask` / `distributed
 
 ```shell
 make lightgbm-unit-tests \
-    -e DASK_VERSION=2023.4.0
+    -e DASK_VERSION=2024.12.0
 ```
 
 ## Profile LightGBM code <a name="profiling"></a>

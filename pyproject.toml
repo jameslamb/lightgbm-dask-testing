@@ -8,6 +8,8 @@ select = [
     "E",
     # pyflakes
     "F",
+    # isort
+    "I",
     # NumPy-specific rules
     "NPY",
     # pylint
@@ -16,6 +18,19 @@ select = [
     "RET504",
     # flake8-simplify: use dict.get() instead of an if-else block
     "SIM401",
+]
+
+[tool.ruff.lint.isort]
+
+# prevent ruff from thinking that 'lightgbm.dask' imports should
+# come after all others
+known-third-party = [
+  "dask",
+  "dask_cloudprovider",
+  "lightgbm",
+  "pandas",
+  "scipy",
+  "sklearn",
 ]
 
 [tool.ruff.lint.per-file-ignores]

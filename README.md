@@ -1,6 +1,6 @@
 # Testing `lightgbm.dask`
 
-[![GitHub Actions status](https://github.com/jameslamb/lightgbm-dask-testing/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/jameslamb/lightgbm-dask-testing/actions)
+[![GitHub Actions](https://github.com/jameslamb/lightgbm-dask-testing/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/jameslamb/lightgbm-dask-testing/actions/workflows/main.yml)
 
 This repository can be used to test and develop changes to LightGBM's Dask integration.
 It contains the following useful features:
@@ -110,7 +110,7 @@ pip install --upgrade awscli
 Next, configure your shell to make authenticated requests to AWS.
 If you've never done this, you can see [the AWS CLI docs](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 
-The rest of this section assums that the shell variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` have been sett.
+The rest of this section assumes that the shell variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` have been sett.
 
 I like to set these by keeping them in a file
 

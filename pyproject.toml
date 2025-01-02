@@ -8,6 +8,8 @@ select = [
     "E",
     # pyflakes
     "F",
+    # isort
+    "I",
     # NumPy-specific rules
     "NPY",
     # pylint

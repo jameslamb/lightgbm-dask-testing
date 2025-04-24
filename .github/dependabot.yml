@@ -5,6 +5,7 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # group updates in a single PR
     groups:
       ci-dependencies:
         patterns:

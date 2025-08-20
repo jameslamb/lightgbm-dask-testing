@@ -34,6 +34,9 @@ jobs:
         with:
           context: .
           file: ./Dockerfile-notebook-base
+          build-args:
+            DASK_VERSION: "2025.7.0"
+            PYTHON_VERSION: "3.13"
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-notebook-base
           #labels: ${{ steps.meta.outputs.labels }}

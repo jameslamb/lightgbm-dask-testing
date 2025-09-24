@@ -6,13 +6,13 @@ exclude: |
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-toml
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.16.1
+    rev: v1.18.2
     hooks:
       - id: mypy
         args: ["--config-file", "pyproject.toml"]
@@ -21,7 +21,7 @@ repos:
           - types-requests
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.12.2
+    rev: v0.13.1
     hooks:
       # Run the linter.
       - id: ruff
@@ -32,12 +32,12 @@ repos:
         args: ["--config", "pyproject.toml"]
         types_or: [python, jupyter]
   - repo: https://github.com/maxwinterstein/shfmt-py
-    rev: v3.11.0.2
+    rev: v3.12.0.1
     hooks:
       - id: shfmt
         args: ["--indent=4", "--space-redirects", "--write"]
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.10.0.1
+    rev: v0.11.0.1
     hooks:
       - id: shellcheck
         args: ["--exclude=SC2002"]

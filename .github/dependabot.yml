@@ -5,6 +5,9 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # only accept releases that have been out for at least 15 days
+    cooldown:
+      default-days: 15
     # group updates in a single PR
     groups:
       ci-dependencies:
